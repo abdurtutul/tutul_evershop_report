@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow-y: scroll;">
+<head>
+  <meta charset="UTF-8">
+  <title>Newman Summary Report</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+
+<style>
+code.renderMarkdown table, code.renderMarkdown th, code.renderMarkdown td {
+    border: 1px solid black;
+    width: max-content;
+    padding: .75rem;
+}
+
+.theme-dark {
+    --background-color: #222;
+    --bg-card-deck: #444444;
+    --text-color: #ccd2d8;
+    --tab-border: solid 1px #444;
+    --success: #3c9372;
+    --failure: #c24a3f;
+    --warning: #d28c23;
+    --info: #4083b6;
+    --badge-outline: #3c9372;
+    --badge-bg: #cdd3db;
+    --badge-text: #ccd2d9;
+    --failure-row: #c24a3f;
+    --warning-row: #d28c23;
+    --card-bg: #444;
+    --card-footer: #4f5758;
+    --form-input: #ececb5;
+    --hov-text: #d2dae5;
+    --h4-text: #ccd1d9;
+}
+
+.theme-light {
+    --tab-border: solid 1px #fff;
+    --text-color: #000000;
+    --success: #42a745;
+    --failure: #dc3544;
+    --warning: #f4c10b;
+    --info: #49a1b8;
+    --badge-outline: #040411;
+    --badge-bg: #f8f9fa;
+    --badge-text: #fff;
+    --failure-row: #f5c6cb;
+    --warning-row: #ffeeba;
+    --card-bg: #f7f7f7;
+    --hov-text: #fff;
+    --h4-text: #ffffff;
+}
+
+body {
+  padding-top:30px;
+  background-color: var(--background-color)!important;
+  color: var(--text-color);
+}
+
+#execution-data {
+  padding: 10px;
+  border: var(--tab-border);
+  border-top: none;
+}
+
+.nav-tabs {
+  padding-top: 10px;
+  height: 105px;
+  overflow-y: auto;
+}
+
+body.theme-dark .card-header {
+    background-color: #444;
+}
+
+body.theme-light .card-header {
+    background-color: #f7f7f7;
+}
+
+.card-footer {
+    padding: .75rem 1.25rem;
+    background-color: var(--card-footer);
+}
+
+.card-deck {
+    background-color: var(--bg-card-deck)!important;
+}
+.form-control {
+    background: var(--form-input);
+}
+
+.custom-tab {
+  padding: 10px 15px;
+  margin-right: 0px;
+  height: 47px;
+  width: 69px;
+  text-align: center;
+  border: var(--tab-border);
+  border-bottom: none;
+  cursor:pointer;
+}
+
+body.theme-dark .text-white {
+    color: #ccd2d9!important;
+}
+h4 {
+    color: var(--h4-text);
+}
+
+body.theme-dark h1 {
+    color: #ccd2da;
+}
+
+body.theme-dark .bg-light>td {
+    background: #4f5858!important;
+}
+
+body.theme-dark .hljs {
+    background: #0a0a0ab0!important;
+    color: #8d8787!important;
+}
+
+.bg-info {
+    background-color: var(--info)!important;
+}
+.bg-success {
+    background-color: var(--success)!important;
+}
+
+.alert-success {
+    background-color: var(--success)!important;
+}
+
+.alert-warning {
+    background-color: var(--warning)!important;
+}
+
+.alert-info {
+    background-color: var(--info)!important;
+}
+
+.bg-warning {
+    background-color: var(--warning)!important;
+}
+
+.badge-warning {
+    color: var(--badge-text)!important;
+    background-color: var(--warning)!important;
+}
+
+.table-warning>td {
+    background-color: var(--warning-row);
+}
+
+.alert-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-dark .alert-dark {
+    background-color: #636467!important;
+}
+
+body.theme-dark .text-dark {
+    color: #d1dae4!important;
+}
+
+body.theme-dark .badge-light {
+    color: #212529;
+    background-color: #cdd3db;
+}
+
+body.theme-light .badge-light {
+    color: #212529;
+    background-color: #f8f9fa;
+}
+body.theme-light .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-dark .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+.table-danger>td {
+    background-color: var(--failure-row);
+}
+
+body.theme-dark .table .thead-light th {
+    background-color: #4f5858!important;
+    border-color: #dee2e6!important;
+    color: #ccd2d8!important;
+}
+
+.itPassed {
+  background: var(--success);
+  color: white;
+}
+.itFailed {
+  background: var(--failure);
+  color: white;
+}
+
+.resultsInfoPass {
+  color: var(--success);
+  padding-top: 4px;
+}
+
+.resultsInfoFail {
+  color: var(--failure);
+  padding-top: 4px;
+}
+
+.badge-outline-success {
+  color: var(--success);
+  border: 1px solid var(--success);
+  background-color: transparent;
+}
+
+.badge-outline {
+  color: var(--badge-outline);
+  border: 1px solid var(--badge-outline);
+  background-color: transparent;
+}
+
+.btn-outline-success {
+    color: var(--success)!important;
+    border-color: var(--success)!important;
+}
+
+.backToTop:hover {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: var(--hov-text)!important;
+}
+
+.btn-outline-success:hover {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: var(--hov-text)!important;
+}
+
+.btn-outline-secondary {
+  background-color: var(--success)!important;
+  color: var(--hov-text)!important;
+}
+
+body.theme-dark .env-heading {
+    color: #ccd2d9!important;
+}
+
+body, html {
+  height:100%;
+}
+
+.card {
+  overflow:hidden;
+}
+
+body.theme-dark .card-body {
+    background-color: #444;
+}
+
+body.theme-light .card-body {
+    background-color: #f7f7f7;
+}
+
+body.theme-dark .card-body .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-light .card-body .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+.card-body .rotate {
+  z-index: 8;
+  float: right;
+  height: 100%;
+}
+
+.card-body .rotate i {
+  color: #14141426;
+  position: absolute;
+  left: 0;
+  left: auto;
+  right: -10px;
+  bottom: 0;
+  display: block;
+  -webkit-transform: rotate(-44deg);
+  -moz-transform: rotate(-44deg);
+  -o-transform: rotate(-44deg);
+  -ms-transform: rotate(-44deg);
+  transform: rotate(-44deg);
+}
+
+.dyn-height {
+  max-height:350px;
+  overflow-y:auto;
+}
+
+.nav-pills .nav-link.active {
+  background-color: transparent!important;
+}
+
+.backToTop {
+  display: none;
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 99;
+  font-size: 15px;
+  outline: none;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.card-header .fa {
+  transition: .3s transform ease-in-out;
+}
+.card-header .collapsed .fa {
+  transform: rotate(90deg);
+}
+
+.single-line-tabs {
+  padding-top: 10px;
+  height: 60px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 20px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 0px;
+  bottom: 4px;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  box-shadow: 0 0px 15px #2020203d;
+  background: white;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+input:checked + .slider {
+  background-color: #4083b6;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #4083b6;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(24px);
+  -ms-transform: translateX(24px);
+  transform: translateX(24px);
+  background: white;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+table.dataTable td, table.dataTable tr {
+    vertical-align: middle;
+}
+
+body.theme-dark code {
+    color: #ccd2d8!important;
+}
+
+body.theme-light code {
+    color: #000000!important;
+}
+
+.text-wrap {
+    word-wrap: break-word; 
+    min-width: 600px; 
+    max-width: 600px; 
+    white-space: normal;
+}
+
+</style>
+</head>
+<body class="theme-dark">
+<script>
+    function setTheme(themeName) {
+        localStorage.setItem('theme', themeName);
+        document.body.className = themeName;
+    }
+
+    function toggleTheme() {
+        if (localStorage.getItem('theme') === 'theme-light') {
+            setTheme('theme-dark');
+        } else {
+            setTheme('theme-light');
+        }
+    }
+</script>
+  <div class="container">
+        <div class="container">
+            <label>Light</label>
+            <label id="switch" class="switch">
+                <input type="checkbox" onchange="toggleTheme()" id="slider">
+                <span class="slider round"></span>
+            </label>
+            <label>Dark</label>
+        </div>
+        <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab" role="tablist">
+            <li class="nav-item bg-info active" data-toggle="tooltip" title="Click to view the Summary">
+                <a class="nav-link text-white" id="pills-summary-tab" data-toggle="pill" href="#pills-summary" role="tab" aria-controls="pills-summary" aria-selected="true">Summary</a>
+            </li>
+            <li class="nav-item bg-success" data-toggle="tooltip" title="Click to view the Requests">
+                <a class="nav-link text-white" id="pills-requests-tab" data-toggle="pill" href="#pills-requests" role="tab" aria-controls="pills-requests" aria-selected="false">Total Requests <span class="badge badge-light">3</span></a>
+            </li>
+            <li class="nav-item bg-danger" data-toggle="tooltip" title="Click to view the Failed Tests">
+                <a class="nav-link text-white" id="pills-failed-tab" data-toggle="pill" href="#pills-failed" role="tab" aria-controls="pills-failed" aria-selected="false">Failed Tests <span class="badge badge-light">0</span></a>
+            </li>
+            <li class="nav-item bg-warning" data-toggle="tooltip" title="Click to view the Skipped Tests">
+                <a class="nav-link text-white" id="pills-skipped-tab" data-toggle="pill" href="#pills-skipped" role="tab" aria-controls="pills-skipped" aria-selected="false">Skipped Tests <span class="badge badge-light">0</span></a>
+            </li>
+            </ul>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-summary" role="tabcard" aria-labelledby="pills-summary-tab">
+<div class="row">
+  <div class="col-md-9 col-lg-12 main">
+   <h1 class="display-2 text-center">Newman Run Dashboard</h1>
+   <h5 class="text-center">Friday, 20 September 2024 22:35:26</h5>
+   <div class="row">
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-success">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-retweet fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Iterations</h6>
+       <h1 class="display-1">1</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-danger">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-list fa-4x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Assertions</h6>
+       <h1 class="display-1">0</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-info">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-plus-circle fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Failed Tests</h6>
+       <h1 class="display-1">0</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-warning">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-share fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Skipped Tests</h6>
+       <h1 class="display-1">0</h1>
+      </div>
+     </div>
+    </div>
+   </div>
+   <hr>
+    <div class="row">
+    <div class="col">
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="card border-info">
+                <div class="card-body">
+                <h5 class="card-title text-uppercase text-white text-center bg-info">File Information</h5>
+                <span><i class="fas fa-file-code"></i></span><strong> Collection:</strong> Tutul_Evershop<br>
+                
+                
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="card border-info">
+                <div class="card-body">
+                <h5 class="card-title text-uppercase text-white text-center bg-info">Timings and Data</h5>
+                <span><i class="fas fa-stopwatch"></i></span><strong> Total run duration:</strong> 1879ms<br>
+                <span><i class="fas fa-database"></i></span><strong> Total data received:</strong> 45.71KB<br>
+                <span><i class="fas fa-stopwatch"></i></span><strong> Average response time:</strong> 554ms<br>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-inverse">
+                    <tr class="text-center">
+                        <th class="text-uppercase">Summary Item</th>
+                        <th class="text-uppercase">Total</th>
+                        <th class="text-uppercase">Failed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Requests</td>
+                        <td class="text-center">3</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td>Prerequest Scripts</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td>Test Scripts</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr class="">
+                        <td>Assertions</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr class="">
+                        <td>Skipped Tests</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">-</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        </div>
+    <hr>
+   </div>
+   </div>
+  </div>
+ </div>
+        </div>
+            <div class="tab-pane fade" id="pills-failed" role="tabcard" aria-labelledby="pills-failed-tab">
+                <button id="topOfFailuresScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+                <div class="alert alert-success text-uppercase text-center">
+                     <br><br><h1 class="text-center">There are no failed tests <span><i class="far fa-thumbs-up"></i></span></h1><br><br>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-skipped" role="tabcard" aria-labelledby="pills-skipped-tab">
+                <button id="topOfSkippedScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+                <div class="alert alert-success text-uppercase text-center">
+                    <br><br><h1 class="text-center">There are no skipped tests <span><i class="far fa-thumbs-up"></i></span></h1><br><br>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-requests" role="tabcard" aria-labelledby="pills-requests-tab">
+
+            <button id="topOfRequestsScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+            <div class="btn-group float-right" role="group" aria-label="Button Group">
+                <button id="openAll" class="btn btn-outline-success btn-sm float-right" style="text-align: center; width: 140px;">Expand Folders</button>
+                <button id="openAllRequests" class="btn btn-outline-success btn-sm float-right" style="text-align: center; width: 140px;">Expand Requests</button>
+            </div>
+
+    <div class="text-uppercase" id="execution-menu">
+        <h5>1 Iteration available to view</h5>
+        
+        <nav class="table-responsive">
+        <ul class="nav single-line-tabs" id="iterationList">
+        </ul>
+        </nav>
+    </div>
+    <h6 class="text-uppercase text-muted" id="iterationSelected" style="padding-top: 10px;"></h6>
+	<div class="tab-content" id="execution-data">
+            <div id="folder-fd123068-797f-4e50-8502-1cd561f70005" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-fd123068-797f-4e50-8502-1cd561f70005" aria-expanded="false" aria-controls="collapse" id="requests-fd123068-797f-4e50-8502-1cd561f70005" class="collapsed text-white z-block">
+                    Iteration: 1 - searching <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-fd123068-797f-4e50-8502-1cd561f70005" class="collapse" aria-labelledby="requests-fd123068-797f-4e50-8502-1cd561f70005">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://demo.evershop.io//search?keyword&#x3D;Nike+react+phantom+run+flyknit+2" target="_blank">https://demo.evershop.io//search?keyword&#x3D;Nike+react+phantom+run+flyknit+2</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 1020ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 15.12KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar bg-success" style="width: 100%" role="progressbar">
+                                            <h5 class="text-uppercase text-white text-center" style="padding-top:5px;"><strong>No Tests for this request</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.39.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">c0545ca7-f1bb-4d6b-b04c-fe0781545b22</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">demo.evershop.io</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">15482</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">text/html; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Fri, 20 Sep 2024 16:35:26 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">W/&quot;3c7a-CDLjo2kzdNEOuaUbLF5kyUM/ygM&quot;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Set-Cookie</td>
+                                                    <td class="text-wrap">sid&#x3D;s%3AY7s8Yt-xftt3eQWf45E8o6ZRoXsDGoW6.Nav4DUhiDRgTUHxqb2HYptFIKAB3v1NgFpjvHm7Dzxw; Path&#x3D;/; Expires&#x3D;Sat, 21 Sep 2024 16:35:26 GMT; HttpOnly</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">request-context</td>
+                                                    <td class="text-wrap">appId&#x3D;cid-v1:</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Powered-By</td>
+                                                    <td class="text-wrap">Express</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-d4b3ca91-9c44-45de-a5e0-827a93872fa7" class="prettyPrint">&lt;!DOCTYPE html&gt;&lt;html id&#x3D;&quot;root&quot; lang&#x3D;&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset&#x3D;&quot;utf-8&quot;/&gt;&lt;script&gt;var eContext &#x3D; {&quot;graphqlResponse&quot;:{&quot;e13kblpuxbnm122m6r1&quot;:&quot;/search&quot;,&quot;e13kblpuxbnm122m6r2&quot;:{&quot;total&quot;:2,&quot;currentFilters&quot;:[{&quot;key&quot;:&quot;keyword&quot;,&quot;operation&quot;:&quot;eq&quot;,&quot;value&quot;:&quot;Nike react phantom run flyknit 2&quot;},{&quot;key&quot;:&quot;page&quot;,&quot;operation&quot;:&quot;eq&quot;,&quot;value&quot;:&quot;1&quot;},{&quot;key&quot;:&quot;limit&quot;,&quot;operation&quot;:&quot;eq&quot;,&quot;value&quot;:&quot;20&quot;}]},&quot;e13kblpuxbnm122m6r4&quot;:{&quot;items&quot;:[{&quot;productId&quot;:182,&quot;name&quot;:&quot;Nike react phantom run flyknit 2&quot;,&quot;sku&quot;:&quot;NJC48508-Black-X&quot;,&quot;price&quot;:{&quot;regular&quot;:{&quot;value&quot;:718,&quot;text&quot;:&quot;$718.00&quot;},&quot;special&quot;:{&quot;value&quot;:718,&quot;text&quot;:&quot;$718.00&quot;}},&quot;image&quot;:{&quot;alt&quot;:&quot;Nike react phantom run flyknit 2&quot;,&quot;url&quot;:&quot;https://demositefiles.blob.core.windows.net/images/catalog/5761/1580/plv5236-Black-listing.png&quot;},&quot;url&quot;:&quot;/men/nike-react-phantom-run-flyknit-2-182&quot;},{&quot;productId&quot;:179,&quot;name&quot;:&quot;Nike react phantom run flyknit 2&quot;,&quot;sku&quot;:&quot;NJC48508-Pink-S&quot;,&quot;price&quot;:{&quot;regular&quot;:{&quot;value&quot;:718,&quot;text&quot;:&quot;$718.00&quot;},&quot;special&quot;:{&quot;value&quot;:718,&quot;text&quot;:&quot;$718.00&quot;}},&quot;image&quot;:{&quot;alt&quot;:&quot;Nike react phantom run flyknit 2&quot;,&quot;url&quot;:&quot;https://demositefiles.blob.core.windows.net/images/catalog/4477/5876/plv3335-Pink-listing.png&quot;},&quot;url&quot;:&quot;/men/nike-react-phantom-run-flyknit-2-179&quot;}]},&quot;e13kblpuxbnm122m6rb&quot;:&quot;/cart&quot;,&quot;e13kblpuxbnm122m6rc&quot;:null,&quot;e13kblpuxbnm122m6rd&quot;:{&quot;breadcrumbs&quot;:[{&quot;title&quot;:&quot;Home&quot;,&quot;url&quot;:&quot;/&quot;},{&quot;title&quot;:&quot;Search results for: Nike react phantom run flyknit 2&quot;,&quot;url&quot;:&quot;https://demo.evershop.io/search?keyword&#x3D;Nike+react+phantom+run+flyknit+2&quot;}]},&quot;e13kblpuxbnm122m6re&quot;:{&quot;copyRight&quot;:&quot;\u00A9 2022 Evershop. All Rights Reserved.&quot;},&quot;e13kblpuxbnm122m6rf&quot;:{&quot;title&quot;:&quot;Search results for: Nike react phantom run flyknit 2&quot;,&quot;description&quot;:&quot;Search results for: Nike react phantom run flyknit 2&quot;},&quot;e13kblpuxbnm122m6rg&quot;:{&quot;headTags&quot;:{&quot;metas&quot;:[],&quot;links&quot;:[],&quot;scripts&quot;:[],&quot;base&quot;:null}},&quot;e13kblpuxbnm122m6rj&quot;:{&quot;logo&quot;:{&quot;src&quot;:null,&quot;alt&quot;:null,&quot;width&quot;:null,&quot;height&quot;:null}},&quot;e13kblpuxbnm122m6rk&quot;:null,&quot;e13kblpuxbnm122m6rl&quot;:&quot;/account&quot;,&quot;e13kblpuxbnm122m6rm&quot;:&quot;/account/login&quot;,&quot;e5sb12rm1axz9jg&quot;:{&quot;menus&quot;:[{&quot;id&quot;:&quot;5sb12rm1axz9k8&quot;,&quot;name&quot;:&quot;Shop \u2764\uFE0F&quot;,&quot;url&quot;:&quot;javascript:void(0)&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;javascript:void(0)&quot;,&quot;children&quot;:[{&quot;name&quot;:&quot;Men&quot;,&quot;url&quot;:&quot;/men&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/men&quot;},{&quot;name&quot;:&quot;Women&quot;,&quot;url&quot;:&quot;/women&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/women&quot;}]},{&quot;id&quot;:&quot;5sb12rm1axz9kb&quot;,&quot;name&quot;:&quot;About us&quot;,&quot;url&quot;:&quot;/page/about-us&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/page/about-us&quot;,&quot;children&quot;:[]}],&quot;isMain&quot;:true,&quot;className&quot;:&quot;&quot;}},&quot;propsMap&quot;:{&quot;137dcfd8bf7950dd6201684efdcb40a1&quot;:[{&quot;origin&quot;:&quot;searchPageUrl&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m6r1&quot;}],&quot;53a5c4e443c686e83ed07c4024cb9005&quot;:[],&quot;cd65308b660ab08acbf37587da8b8cec&quot;:[{&quot;origin&quot;:&quot;products&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m6r2&quot;}],&quot;8258d32f10368fb12b468d1934c39e7c&quot;:[{&quot;origin&quot;:&quot;products&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m6r4&quot;}],&quot;73803fc0a7d90e8e0ef8a16b1a64f089&quot;:[],&quot;8e6938817356c0764e16d9dc7d99d4d3&quot;:[],&quot;5248a628c0ba0eb2edc726fbc70778f8&quot;:[{&quot;origin&quot;:&quot;cartUrl&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m6rb&quot;},{&quot;origin&quot;:&quot;cart&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m6rc&quot;}],&quot;45515ab09f9ce8f561fc40ca4ffb7b2f&quot;:[{&quot;origin&quot;:&quot;pageInfo&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m6rd&quot;}],&quot;03ce62a99b643c53cea33f6fc2c573f5&quot;:[{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m6re&quot;}],&quot;170528765f0295e4db900fd92ea387bc&quot;:[{&quot;origin&quot;:&quot;pageInfo&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m6rf&quot;},{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m6rg&quot;}],&quot;2aa0bf53e05360bd37f2dd0982998263&quot;:[],&quot;a20b83833c6ae10ded5077b0943cfef5&quot;:[{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m6rj&quot;}],&quot;18bf66723f1e3394e1ebb5dce01e8097&quot;:[],&quot;fef4b1d9ae2122930f9c33edbb982d6e&quot;:[{&quot;origin&quot;:&quot;customer&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m6rk&quot;},{&quot;origin&quot;:&quot;accountUrl&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m6rl&quot;},{&quot;origin&quot;:&quot;loginUrl&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m6rm&quot;}],&quot;b9b0aede0abb0546fe77c67089bdd6f5&quot;:[{&quot;origin&quot;:&quot;collection&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m6ro&quot;}],&quot;78d4735155d485f34d387c8394613fb7&quot;:[{&quot;origin&quot;:&quot;textWidget&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m6rs&quot;}],&quot;d71e8a0220472a4a5360ae305aa98d5b&quot;:[{&quot;origin&quot;:&quot;basicMenuWidget&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m6rx&quot;}],&quot;e9869af9cb99540caac4704f0a1d6de86&quot;:[{&quot;origin&quot;:&quot;basicMenuWidget&quot;,&quot;alias&quot;:&quot;e5sb12rm1axz9jg&quot;}]},&quot;widgets&quot;:[{&quot;sortOrder&quot;:1,&quot;areaId&quot;:[&quot;header&quot;],&quot;type&quot;:&quot;basic_menu&quot;,&quot;id&quot;:&quot;e9869af9cb99540caac4704f0a1d6de86&quot;}]}&lt;/script&gt;&lt;link href&#x3D;&quot;/assets/frontStore/catalogSearch/client/a3f0705825866defa866.css&quot; rel&#x3D;&quot;stylesheet&quot;/&gt;&lt;title&gt;Search results for: Nike react phantom run flyknit 2&lt;/title&gt;&lt;meta name&#x3D;&quot;description&quot; content&#x3D;&quot;Search results for: Nike react phantom run flyknit 2&quot;/&gt;&lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1.0&quot;/&gt;&lt;/head&gt;&lt;body id&#x3D;&quot;body&quot;&gt;&lt;div id&#x3D;&quot;app&quot; class&#x3D;&quot;bg-background&quot;&gt;&lt;div class&#x3D;&quot;wrapper&quot;&gt;&lt;div class&#x3D;&quot;loading-bar&quot; style&#x3D;&quot;width:0%;display:none&quot;&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;header grid grid-cols-3&quot;&gt;&lt;div class&#x3D;&quot;&quot;&gt;&lt;div class&#x3D;&quot;flex justify-start gap-6 items-center&quot;&gt;&lt;nav class&#x3D;&quot;p-4 relative md:flex md:justify-center&quot;&gt;&lt;div class&#x3D;&quot;flex justify-between items-center&quot;&gt;&lt;div class&#x3D;&quot;md:hidden&quot;&gt;&lt;a href&#x3D;&quot;#&quot; class&#x3D;&quot;text-black focus:outline-none&quot;&gt;&lt;svg class&#x3D;&quot;w-9 h-9&quot; fill&#x3D;&quot;none&quot; stroke&#x3D;&quot;currentColor&quot; viewBox&#x3D;&quot;0 0 24 24&quot; xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;path stroke-linecap&#x3D;&quot;round&quot; stroke-linejoin&#x3D;&quot;round&quot; stroke-width&#x3D;&quot;2&quot; d&#x3D;&quot;M4 6h16M4 12h16m-7 6h7&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;&lt;ul class&#x3D;&quot;hidden  md:flex md:justify-center md:space-x-10 absolute md:relative left-[-2.5rem] md:left-0 top-full md:top-auto mt-2 md:mt-0 w-screen md:w-auto md:bg-transparent p-4 md:p-0 min-w-[250px] bg-white z-30 divide-y md:divide-y-0&quot;&gt;&lt;li class&#x3D;&quot;relative group&quot;&gt;&lt;a href&#x3D;&quot;javascript:void(0)&quot; class&#x3D;&quot;hover:text-gray-300 transition-colors block md:inline-block px-4 py-4 md:px-0 md:py-0&quot;&gt;Shop ❤️&lt;/a&gt;&lt;ul class&#x3D;&quot;md:absolute left-0 top-full mt-0 md:mt-3 w-48 bg-white md:shadow-lg rounded-md md:opacity-0 md:group-hover:opacity-100 md:group-hover:translate-y-0 transform transition-all duration-300 ease-in-out min-w-full md:min-w-[250px] z-30 md:border-t-4&quot;&gt;&lt;li&gt;&lt;a href&#x3D;&quot;/men&quot; class&#x3D;&quot;block px-8 md:px-4 py-3 text-gray-700 hover:bg-gray-100&quot;&gt;Men&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href&#x3D;&quot;/women&quot; class&#x3D;&quot;block px-8 md:px-4 py-3 text-gray-700 hover:bg-gray-100&quot;&gt;Women&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li class&#x3D;&quot;relative group&quot;&gt;&lt;a href&#x3D;&quot;/page/about-us&quot; class&#x3D;&quot;hover:text-gray-300 transition-colors block md:inline-block px-4 py-4 md:px-0 md:py-0&quot;&gt;About us&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/nav&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;logo md:ml-0 flex justify-center items-center&quot;&gt;&lt;a href&#x3D;&quot;/&quot; class&#x3D;&quot;logo-icon&quot;&gt;&lt;svg width&#x3D;&quot;128&quot; height&#x3D;&quot;146&quot; viewBox&#x3D;&quot;0 0 128 146&quot; fill&#x3D;&quot;none&quot; xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;path d&#x3D;&quot;M32.388 18.0772L1.15175 36.1544L1.05206 72.5081L0.985596 108.895L32.4213 127.039C49.7009 137.008 63.9567 145.182 64.1228 145.182C64.289 145.182 72.8956 140.264 83.2966 134.283C93.6644 128.268 107.82 120.127 114.732 116.139L127.26 108.895V101.119V93.3102L126.529 93.7089C126.097 93.9415 111.941 102.083 95.06 111.853C78.1459 121.622 64.156 129.531 63.9567 129.498C63.724 129.431 52.5587 123.051 39.1005 115.275L14.6099 101.152V72.5746V43.9967L25.6756 37.6165C31.7234 34.1274 42.8223 27.7472 50.2991 23.4273C57.7426 19.1073 63.9899 15.585 64.1228 15.585C64.2557 15.585 72.9288 20.5362 83.3963 26.5841L113.902 43.9967L118.713 41.1657L127.26 36.1544L113.902 28.5447C103.334 22.2974 64.3554 -0.033191 64.0231 3.90721e-05C63.8237 3.90721e-05 49.568 8.14142 32.388 18.0772Z&quot; fill&#x3D;&quot;#1F1F1F&quot;&gt;&lt;/path&gt;&lt;path d&#x3D;&quot;M96.0237 54.1983C78.9434 64.0677 64.721 72.2423 64.4219 72.3088C64.0896 72.4084 55.7488 67.7562 44.8826 61.509L25.9082 50.543V58.4186L25.9414 66.2609L44.3841 76.8945C54.5193 82.743 63.1591 87.6611 63.5911 87.8272C64.2557 88.0598 68.9079 85.5011 95.5585 70.1156C112.705 60.1798 126.861 51.9719 127.027 51.839C127.16 51.7061 127.227 48.1505 127.194 43.9302L127.094 36.2541L96.0237 54.1983Z&quot; fill&#x3D;&quot;#1F1F1F&quot;&gt;&lt;/path&gt;&lt;path d&#x3D;&quot;M123.771 66.7261C121.943 67.7562 107.854 75.8976 92.4349 84.8033C77.0161 93.7089 64.289 100.986 64.1228 100.986C63.9567 100.986 55.3501 96.0683 44.9491 90.0869L26.0744 79.1874L25.9747 86.8303C25.9082 92.6788 26.0079 94.5729 26.307 94.872C26.9383 95.4369 63.7241 116.604 64.1228 116.604C64.4551 116.604 126.496 80.8821 127.027 80.4169C127.16 80.284 127.227 76.7284 127.194 72.4749L127.094 64.7987L123.771 66.7261Z&quot; fill&#x3D;&quot;#1F1F1F&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;icon-wrapper flex justify-end space-x-4&quot;&gt;&lt;div class&#x3D;&quot;search-box&quot;&gt;&lt;a href&#x3D;&quot;#&quot; class&#x3D;&quot;search-icon&quot;&gt;&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; style&#x3D;&quot;width:2.2rem;height:2.2rem&quot; fill&#x3D;&quot;none&quot; viewBox&#x3D;&quot;0 0 24 24&quot; stroke&#x3D;&quot;currentColor&quot;&gt;&lt;path stroke-linecap&#x3D;&quot;round&quot; stroke-linejoin&#x3D;&quot;round&quot; stroke-width&#x3D;&quot;2&quot; d&#x3D;&quot;M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;mini-cart-wrapper self-center&quot;&gt;&lt;a class&#x3D;&quot;mini-cart-icon&quot; href&#x3D;&quot;/cart&quot;&gt;&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; fill&#x3D;&quot;none&quot; viewBox&#x3D;&quot;0 0 24 24&quot; stroke-width&#x3D;&quot;2&quot; stroke&#x3D;&quot;currentColor&quot; aria-hidden&#x3D;&quot;true&quot; width&#x3D;&quot;20&quot; height&#x3D;&quot;20&quot;&gt;&lt;path stroke-linecap&#x3D;&quot;round&quot; stroke-linejoin&#x3D;&quot;round&quot; d&#x3D;&quot;M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;self-center&quot;&gt;&lt;a href&#x3D;&quot;/account/login&quot;&gt;&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; fill&#x3D;&quot;none&quot; viewBox&#x3D;&quot;0 0 24 24&quot; stroke-width&#x3D;&quot;2&quot; stroke&#x3D;&quot;currentColor&quot; aria-hidden&#x3D;&quot;true&quot; width&#x3D;&quot;25&quot; height&#x3D;&quot;25&quot;&gt;&lt;path stroke-linecap&#x3D;&quot;round&quot; stroke-linejoin&#x3D;&quot;round&quot; d&#x3D;&quot;M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;main class&#x3D;&quot;content&quot;&gt;&lt;div class&#x3D;&quot;breadcrumb page-width my-8&quot;&gt;&lt;span&gt;&lt;a href&#x3D;&quot;/&quot; class&#x3D;&quot;text-interactive&quot;&gt;Home&lt;/a&gt;&lt;span&gt; / &lt;/span&gt;&lt;/span&gt;&lt;span&gt;Search results for: Nike react phantom run flyknit 2&lt;/span&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;page-width&quot;&gt;&lt;div class&#x3D;&quot;mb-4 md:mb-8&quot;&gt;&lt;div class&#x3D;&quot;text-left &quot;&gt;&lt;h1 class&#x3D;&quot;search-name mt-10&quot;&gt;Search results for &amp;quot;&amp;quot;&lt;/h1&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;page-width grid grid-cols-1 &quot;&gt;&lt;div class&#x3D;&quot;&quot;&gt;&lt;div class&#x3D;&quot;product-sorting mb-4&quot;&gt;&lt;div class&#x3D;&quot;product-sorting-inner flex justify-end items-center space-x-2&quot;&gt;&lt;div&gt;&lt;span&gt;Sort By&lt;!-- --&gt;:&lt;/span&gt;&lt;/div&gt;&lt;div style&#x3D;&quot;width:160px&quot;&gt;&lt;div class&#x3D;&quot;form-field-container dropdown null&quot;&gt;&lt;div class&#x3D;&quot;field-wrapper flex flex-grow items-baseline&quot;&gt;&lt;select class&#x3D;&quot;form-field&quot; placeholder&#x3D;&quot;Default&quot;&gt;&lt;option selected&#x3D;&quot;&quot; value&#x3D;&quot;&quot;&gt;Default&lt;/option&gt;&lt;option value&#x3D;&quot;price&quot;&gt;Price&lt;/option&gt;&lt;option value&#x3D;&quot;name&quot;&gt;Name&lt;/option&gt;&lt;/select&gt;&lt;div class&#x3D;&quot;field-border&quot;&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;field-suffix&quot;&gt;&lt;svg viewBox&#x3D;&quot;0 0 20 20&quot; width&#x3D;&quot;1rem&quot; height&#x3D;&quot;1.25rem&quot; focusable&#x3D;&quot;false&quot; aria-hidden&#x3D;&quot;true&quot;&gt;&lt;path d&#x3D;&quot;m10 16-4-4h8l-4 4zm0-12 4 4H6l4-4z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;sort-direction self-center&quot;&gt;&lt;a href&#x3D;&quot;#&quot;&gt;&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; width&#x3D;&quot;15&quot; height&#x3D;&quot;15&quot; viewBox&#x3D;&quot;0 0 24 24&quot; fill&#x3D;&quot;none&quot; stroke&#x3D;&quot;currentColor&quot; stroke-width&#x3D;&quot;1.5&quot; stroke-linecap&#x3D;&quot;round&quot; stroke-linejoin&#x3D;&quot;round&quot; class&#x3D;&quot;feather feather-arrow-down&quot;&gt;&lt;line x1&#x3D;&quot;12&quot; y1&#x3D;&quot;5&quot; x2&#x3D;&quot;12&quot; y2&#x3D;&quot;19&quot;&gt;&lt;/line&gt;&lt;polyline points&#x3D;&quot;19 12 12 19 5 12&quot;&gt;&lt;/polyline&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div class&#x3D;&quot;grid grid-cols-2 md:grid-cols-4 gap-8&quot;&gt;&lt;div class&#x3D;&quot;listing-tem&quot;&gt;&lt;div class&#x3D;&quot;product-thumbnail-listing&quot;&gt;&lt;a href&#x3D;&quot;/men/nike-react-phantom-run-flyknit-2-182&quot;&gt;&lt;img src&#x3D;&quot;https://demositefiles.blob.core.windows.net/images/catalog/5761/1580/plv5236-Black-listing.png&quot; alt&#x3D;&quot;Nike react phantom run flyknit 2&quot;/&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;product-name product-list-name mt-4 mb-1&quot;&gt;&lt;a href&#x3D;&quot;/men/nike-react-phantom-run-flyknit-2-182&quot; class&#x3D;&quot;font-bold hover:underline h5&quot;&gt;&lt;span&gt;Nike react phantom run flyknit 2&lt;/span&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;product-price-listing&quot;&gt;&lt;div&gt;&lt;span class&#x3D;&quot;sale-price font-semibold&quot;&gt;$718.00&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;listing-tem&quot;&gt;&lt;div class&#x3D;&quot;product-thumbnail-listing&quot;&gt;&lt;a href&#x3D;&quot;/men/nike-react-phantom-run-flyknit-2-179&quot;&gt;&lt;img src&#x3D;&quot;https://demositefiles.blob.core.windows.net/images/catalog/4477/5876/plv3335-Pink-listing.png&quot; alt&#x3D;&quot;Nike react phantom run flyknit 2&quot;/&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;product-name product-list-name mt-4 mb-1&quot;&gt;&lt;a href&#x3D;&quot;/men/nike-react-phantom-run-flyknit-2-179&quot; class&#x3D;&quot;font-bold hover:underline h5&quot;&gt;&lt;span&gt;Nike react phantom run flyknit 2&lt;/span&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;product-price-listing&quot;&gt;&lt;div&gt;&lt;span class&#x3D;&quot;sale-price font-semibold&quot;&gt;$718.00&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;span class&#x3D;&quot;product-count italic block mt-8&quot;&gt;2 products&lt;/span&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;products-pagination&quot;&gt;&lt;ul class&#x3D;&quot;pagination flex justify-center space-x-4&quot;&gt;&lt;li class&#x3D;&quot;page-item current self-center&quot;&gt;&lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;link-button page-link&quot;&gt;1&lt;/button&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/main&gt;&lt;div class&#x3D;&quot;footer&quot;&gt;&lt;div class&#x3D;&quot;footer__default&quot;&gt;&lt;div class&#x3D;&quot;page-width grid grid-cols-1 md:grid-cols-2 gap-8 justify-between&quot;&gt;&lt;div&gt;&lt;div class&#x3D;&quot;card-icons flex justify-center space-x-4 md:justify-start&quot;&gt;&lt;div&gt;&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; width&#x3D;&quot;38&quot; height&#x3D;&quot;24&quot; aria-labelledby&#x3D;&quot;pi-visa&quot; viewBox&#x3D;&quot;0 0 38 24&quot;&gt;&lt;path d&#x3D;&quot;M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z&quot; opacity&#x3D;&quot;0.07&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#fff&quot; d&#x3D;&quot;M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#142688&quot; d&#x3D;&quot;M28.3 10.1H28c-.4 1-.7 1.5-1 3h1.9c-.3-1.5-.3-2.2-.6-3zm2.9 5.9h-1.7c-.1 0-.1 0-.2-.1l-.2-.9-.1-.2h-2.4c-.1 0-.2 0-.2.2l-.3.9c0 .1-.1.1-.1.1h-2.1l.2-.5L27 8.7c0-.5.3-.7.8-.7h1.5c.1 0 .2 0 .2.2l1.4 6.5c.1.4.2.7.2 1.1.1.1.1.1.1.2zm-13.4-.3l.4-1.8c.1 0 .2.1.2.1.7.3 1.4.5 2.1.4.2 0 .5-.1.7-.2.5-.2.5-.7.1-1.1-.2-.2-.5-.3-.8-.5-.4-.2-.8-.4-1.1-.7-1.2-1-.8-2.4-.1-3.1.6-.4.9-.8 1.7-.8 1.2 0 2.5 0 3.1.2h.1c-.1.6-.2 1.1-.4 1.7-.5-.2-1-.4-1.5-.4-.3 0-.6 0-.9.1-.2 0-.3.1-.4.2-.2.2-.2.5 0 .7l.5.4c.4.2.8.4 1.1.6.5.3 1 .8 1.1 1.4.2.9-.1 1.7-.9 2.3-.5.4-.7.6-1.4.6-1.4 0-2.5.1-3.4-.2-.1.2-.1.2-.2.1zm-3.5.3c.1-.7.1-.7.2-1 .5-2.2 1-4.5 1.4-6.7.1-.2.1-.3.3-.3H18c-.2 1.2-.4 2.1-.7 3.2-.3 1.5-.6 3-1 4.5 0 .2-.1.2-.3.2M5 8.2c0-.1.2-.2.3-.2h3.4c.5 0 .9.3 1 .8l.9 4.4c0 .1 0 .1.1.2 0-.1.1-.1.1-.1l2.1-5.1c-.1-.1 0-.2.1-.2h2.1c0 .1 0 .1-.1.2l-3.1 7.3c-.1.2-.1.3-.2.4-.1.1-.3 0-.5 0H9.7c-.1 0-.2 0-.2-.2L7.9 9.5c-.2-.2-.5-.5-.9-.6-.6-.3-1.7-.5-1.9-.5L5 8.2z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/div&gt;&lt;div&gt;&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; width&#x3D;&quot;38&quot; height&#x3D;&quot;24&quot; aria-labelledby&#x3D;&quot;pi-master&quot; viewBox&#x3D;&quot;0 0 38 24&quot;&gt;&lt;path d&#x3D;&quot;M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z&quot; opacity&#x3D;&quot;0.07&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#fff&quot; d&#x3D;&quot;M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32&quot;&gt;&lt;/path&gt;&lt;circle cx&#x3D;&quot;15&quot; cy&#x3D;&quot;12&quot; r&#x3D;&quot;7&quot; fill&#x3D;&quot;#EB001B&quot;&gt;&lt;/circle&gt;&lt;circle cx&#x3D;&quot;23&quot; cy&#x3D;&quot;12&quot; r&#x3D;&quot;7&quot; fill&#x3D;&quot;#F79E1B&quot;&gt;&lt;/circle&gt;&lt;path fill&#x3D;&quot;#FF5F00&quot; d&#x3D;&quot;M22 12c0-2.4-1.2-4.5-3-5.7-1.8 1.3-3 3.4-3 5.7s1.2 4.5 3 5.7c1.8-1.2 3-3.3 3-5.7z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/div&gt;&lt;div&gt;&lt;svg viewBox&#x3D;&quot;0 0 38 24&quot; xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; width&#x3D;&quot;38&quot; height&#x3D;&quot;24&quot; role&#x3D;&quot;img&quot; aria-labelledby&#x3D;&quot;pi-paypal&quot;&gt;&lt;title id&#x3D;&quot;pi-paypal&quot;&gt;PayPal&lt;/title&gt;&lt;path opacity&#x3D;&quot;.07&quot; d&#x3D;&quot;M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#fff&quot; d&#x3D;&quot;M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#003087&quot; d&#x3D;&quot;M23.9 8.3c.2-1 0-1.7-.6-2.3-.6-.7-1.7-1-3.1-1h-4.1c-.3 0-.5.2-.6.5L14 15.6c0 .2.1.4.3.4H17l.4-3.4 1.8-2.2 4.7-2.1z&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#3086C8&quot; d&#x3D;&quot;M23.9 8.3l-.2.2c-.5 2.8-2.2 3.8-4.6 3.8H18c-.3 0-.5.2-.6.5l-.6 3.9-.2 1c0 .2.1.4.3.4H19c.3 0 .5-.2.5-.4v-.1l.4-2.4v-.1c0-.2.3-.4.5-.4h.3c2.1 0 3.7-.8 4.1-3.2.2-1 .1-1.8-.4-2.4-.1-.5-.3-.7-.5-.8z&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#012169&quot; d&#x3D;&quot;M23.3 8.1c-.1-.1-.2-.1-.3-.1-.1 0-.2 0-.3-.1-.3-.1-.7-.1-1.1-.1h-3c-.1 0-.2 0-.2.1-.2.1-.3.2-.3.4l-.7 4.4v.1c0-.3.3-.5.6-.5h1.3c2.5 0 4.1-1 4.6-3.8v-.2c-.1-.1-.3-.2-.5-.2h-.1z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;self-center&quot;&gt;&lt;div class&#x3D;&quot;copyright text-center md:text-right text-textSubdued&quot;&gt;&lt;span&gt;© 2022 Evershop. All Rights Reserved.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div class&#x3D;&quot;Toastify&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;script src&#x3D;&quot;/assets/frontStore/catalogSearch/client/a3f0705825866defa866.js&quot;&gt;&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-d4b3ca91-9c44-45de-a5e0-827a93872fa7">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <h5 class="alert alert-success text-uppercase text-center">No Tests for this request</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-6d2775aa-8bd0-48ec-9b81-701d844bb589" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-6d2775aa-8bd0-48ec-9b81-701d844bb589" aria-expanded="false" aria-controls="collapse" id="requests-6d2775aa-8bd0-48ec-9b81-701d844bb589" class="collapsed text-white z-block">
+                    Iteration: 1 - select_product <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-6d2775aa-8bd0-48ec-9b81-701d844bb589" class="collapse" aria-labelledby="requests-6d2775aa-8bd0-48ec-9b81-701d844bb589">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://demo.evershop.io//men/nike-react-phantom-run-flyknit-2-182" target="_blank">https://demo.evershop.io//men/nike-react-phantom-run-flyknit-2-182</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 383ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 18.52KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar bg-success" style="width: 100%" role="progressbar">
+                                            <h5 class="text-uppercase text-white text-center" style="padding-top:5px;"><strong>No Tests for this request</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.39.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">413dd76b-5ce1-44b4-8bde-497221726397</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">demo.evershop.io</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cookie</td>
+                                                        <td class="text-wrap">sid&#x3D;s%3AY7s8Yt-xftt3eQWf45E8o6ZRoXsDGoW6.Nav4DUhiDRgTUHxqb2HYptFIKAB3v1NgFpjvHm7Dzxw</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">18967</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">text/html; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Fri, 20 Sep 2024 16:35:27 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">W/&quot;4a17-oSLZhArTMRqKl6iu8zf6UAI+c9w&quot;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">request-context</td>
+                                                    <td class="text-wrap">appId&#x3D;cid-v1:</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Powered-By</td>
+                                                    <td class="text-wrap">Express</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-58b6288f-3256-468b-8243-16d717e00d49" class="prettyPrint">&lt;!DOCTYPE html&gt;&lt;html id&#x3D;&quot;root&quot; lang&#x3D;&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset&#x3D;&quot;utf-8&quot;/&gt;&lt;script&gt;var eContext &#x3D; {&quot;graphqlResponse&quot;:{&quot;e13kblpuxbnm122m77a&quot;:&quot;/search&quot;,&quot;e13kblpuxbnm122m77b&quot;:{&quot;attributes&quot;:[{&quot;attributeName&quot;:&quot;Brand&quot;,&quot;attributeCode&quot;:&quot;brand&quot;,&quot;optionText&quot;:&quot;Nike&quot;},{&quot;attributeName&quot;:&quot;Color&quot;,&quot;attributeCode&quot;:&quot;color&quot;,&quot;optionText&quot;:&quot;Black&quot;}]},&quot;e13kblpuxbnm122m77c&quot;:{&quot;description&quot;:[{&quot;id&quot;:&quot;r__ca5a74f0-173f-4121-ad6c-c7d3f20d2a3b&quot;,&quot;size&quot;:1,&quot;columns&quot;:[{&quot;id&quot;:&quot;c__37f38b5f-8a95-4222-8d13-e9cdedb37ccf&quot;,&quot;size&quot;:1,&quot;data&quot;:{&quot;time&quot;:1725709014759,&quot;blocks&quot;:[{&quot;id&quot;:&quot;mjUrCCjG7r&quot;,&quot;type&quot;:&quot;paragraph&quot;,&quot;data&quot;:{&quot;text&quot;:&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum feugiat mi eget elit elementum, id pulvinar tellus eleifend.&quot;}},{&quot;id&quot;:&quot;JKTM4rVnx9&quot;,&quot;type&quot;:&quot;paragraph&quot;,&quot;data&quot;:{&quot;text&quot;:&quot;Integer porttitor elit id euismod elementum. Nulla vel molestie massa, eget iaculis elit. Quisque a tortor vel lectus ultricies pretium quis non purus. Pellentesque molestie leo eget rutrum tristique.&quot;}}],&quot;version&quot;:&quot;2.30.2&quot;}}]}]},&quot;e13kblpuxbnm122m77d&quot;:{&quot;productId&quot;:182,&quot;sku&quot;:&quot;NJC48508-Black-X&quot;,&quot;name&quot;:&quot;Nike react phantom run flyknit 2&quot;,&quot;gallery&quot;:[{&quot;thumb&quot;:&quot;https://demositefiles.blob.core.windows.net/images/catalog/5069/8631/plv8794-Black-thumb.png&quot;}],&quot;inventory&quot;:{&quot;isInStock&quot;:true}},&quot;e13kblpuxbnm122m77e&quot;:&quot;/api/cart/mine/items&quot;,&quot;e13kblpuxbnm122m77f&quot;:{&quot;name&quot;:&quot;Nike react phantom run flyknit 2&quot;,&quot;sku&quot;:&quot;NJC48508-Black-X&quot;,&quot;price&quot;:{&quot;regular&quot;:{&quot;value&quot;:718,&quot;text&quot;:&quot;$718.00&quot;},&quot;special&quot;:{&quot;value&quot;:718,&quot;text&quot;:&quot;$718.00&quot;}}},&quot;e13kblpuxbnm122m77g&quot;:{&quot;uuid&quot;:&quot;faa0c911-d4e5-4643-be21-4d3175de7870&quot;,&quot;image&quot;:{&quot;alt&quot;:&quot;Nike react phantom run flyknit 2&quot;,&quot;thumb&quot;:&quot;https://demositefiles.blob.core.windows.net/images/catalog/5761/1580/plv5236-Black-thumb.png&quot;,&quot;single&quot;:&quot;https://demositefiles.blob.core.windows.net/images/catalog/5761/1580/plv5236-Black-single.png&quot;},&quot;gallery&quot;:[{&quot;alt&quot;:&quot;Nike react phantom run flyknit 2&quot;,&quot;thumb&quot;:&quot;https://demositefiles.blob.core.windows.net/images/catalog/5069/8631/plv8794-Black-thumb.png&quot;,&quot;single&quot;:&quot;https://demositefiles.blob.core.windows.net/images/catalog/5069/8631/plv8794-Black-single.png&quot;}]},&quot;e13kblpuxbnm122m77h&quot;:{&quot;options&quot;:[]},&quot;e13kblpuxbnm122m77i&quot;:{&quot;url&quot;:&quot;https://demo.evershop.io/men/nike-react-phantom-run-flyknit-2-182&quot;},&quot;e13kblpuxbnm122m77j&quot;:{&quot;variantGroup&quot;:{&quot;variantAttributes&quot;:[{&quot;attributeId&quot;:2,&quot;attributeCode&quot;:&quot;size&quot;,&quot;attributeName&quot;:&quot;Size&quot;,&quot;options&quot;:[{&quot;optionId&quot;:4,&quot;optionText&quot;:&quot;X&quot;,&quot;productId&quot;:180},{&quot;optionId&quot;:4,&quot;optionText&quot;:&quot;X&quot;,&quot;productId&quot;:182},{&quot;optionId&quot;:4,&quot;optionText&quot;:&quot;X&quot;,&quot;productId&quot;:178},{&quot;optionId&quot;:25,&quot;optionText&quot;:&quot;S&quot;,&quot;productId&quot;:177},{&quot;optionId&quot;:25,&quot;optionText&quot;:&quot;S&quot;,&quot;productId&quot;:181},{&quot;optionId&quot;:25,&quot;optionText&quot;:&quot;S&quot;,&quot;productId&quot;:179}]},{&quot;attributeId&quot;:3,&quot;attributeCode&quot;:&quot;color&quot;,&quot;attributeName&quot;:&quot;Color&quot;,&quot;options&quot;:[{&quot;optionId&quot;:19,&quot;optionText&quot;:&quot;Pink&quot;,&quot;productId&quot;:180},{&quot;optionId&quot;:14,&quot;optionText&quot;:&quot;Black&quot;,&quot;productId&quot;:182},{&quot;optionId&quot;:17,&quot;optionText&quot;:&quot;Green&quot;,&quot;productId&quot;:178},{&quot;optionId&quot;:17,&quot;optionText&quot;:&quot;Green&quot;,&quot;productId&quot;:177},{&quot;optionId&quot;:14,&quot;optionText&quot;:&quot;Black&quot;,&quot;productId&quot;:181},{&quot;optionId&quot;:19,&quot;optionText&quot;:&quot;Pink&quot;,&quot;productId&quot;:179}]}],&quot;items&quot;:[{&quot;attributes&quot;:[{&quot;attributeCode&quot;:&quot;size&quot;,&quot;optionId&quot;:4},{&quot;attributeCode&quot;:&quot;color&quot;,&quot;optionId&quot;:19}]},{&quot;attributes&quot;:[{&quot;attributeCode&quot;:&quot;size&quot;,&quot;optionId&quot;:4},{&quot;attributeCode&quot;:&quot;color&quot;,&quot;optionId&quot;:14}]},{&quot;attributes&quot;:[{&quot;attributeCode&quot;:&quot;size&quot;,&quot;optionId&quot;:4},{&quot;attributeCode&quot;:&quot;color&quot;,&quot;optionId&quot;:17}]},{&quot;attributes&quot;:[{&quot;attributeCode&quot;:&quot;size&quot;,&quot;optionId&quot;:25},{&quot;attributeCode&quot;:&quot;color&quot;,&quot;optionId&quot;:17}]},{&quot;attributes&quot;:[{&quot;attributeCode&quot;:&quot;size&quot;,&quot;optionId&quot;:25},{&quot;attributeCode&quot;:&quot;color&quot;,&quot;optionId&quot;:14}]},{&quot;attributes&quot;:[{&quot;attributeCode&quot;:&quot;size&quot;,&quot;optionId&quot;:25},{&quot;attributeCode&quot;:&quot;color&quot;,&quot;optionId&quot;:19}]}]}},&quot;e13kblpuxbnm122m77k&quot;:&quot;/cart&quot;,&quot;e13kblpuxbnm122m77l&quot;:null,&quot;e13kblpuxbnm122m77m&quot;:{&quot;breadcrumbs&quot;:[{&quot;title&quot;:&quot;Home&quot;,&quot;url&quot;:&quot;/&quot;},{&quot;title&quot;:&quot;Men&quot;,&quot;url&quot;:&quot;/men&quot;},{&quot;title&quot;:&quot;Nike React Phantom Run Flyknit 2&quot;,&quot;url&quot;:&quot;https://demo.evershop.io/men/nike-react-phantom-run-flyknit-2-182&quot;}]},&quot;e13kblpuxbnm122m77n&quot;:{&quot;copyRight&quot;:&quot;\u00A9 2022 Evershop. All Rights Reserved.&quot;},&quot;e13kblpuxbnm122m77o&quot;:{&quot;title&quot;:&quot;Nike React Phantom Run Flyknit 2&quot;,&quot;description&quot;:&quot;Nike React Phantom Run Flyknit 2&quot;},&quot;e13kblpuxbnm122m77p&quot;:{&quot;headTags&quot;:{&quot;metas&quot;:[],&quot;links&quot;:[],&quot;scripts&quot;:[],&quot;base&quot;:null}},&quot;e13kblpuxbnm122m77q&quot;:{&quot;logo&quot;:{&quot;src&quot;:null,&quot;alt&quot;:null,&quot;width&quot;:null,&quot;height&quot;:null}},&quot;e13kblpuxbnm122m77r&quot;:null,&quot;e13kblpuxbnm122m77s&quot;:&quot;/account&quot;,&quot;e13kblpuxbnm122m77t&quot;:&quot;/account/login&quot;,&quot;e5sb12rm1axz9vx&quot;:{&quot;menus&quot;:[{&quot;id&quot;:&quot;5sb12rm1axz9wp&quot;,&quot;name&quot;:&quot;Shop \u2764\uFE0F&quot;,&quot;url&quot;:&quot;javascript:void(0)&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;javascript:void(0)&quot;,&quot;children&quot;:[{&quot;name&quot;:&quot;Men&quot;,&quot;url&quot;:&quot;/men&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/men&quot;},{&quot;name&quot;:&quot;Women&quot;,&quot;url&quot;:&quot;/women&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/women&quot;}]},{&quot;id&quot;:&quot;5sb12rm1axz9ws&quot;,&quot;name&quot;:&quot;About us&quot;,&quot;url&quot;:&quot;/page/about-us&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/page/about-us&quot;,&quot;children&quot;:[]}],&quot;isMain&quot;:true,&quot;className&quot;:&quot;&quot;}},&quot;propsMap&quot;:{&quot;137dcfd8bf7950dd6201684efdcb40a1&quot;:[{&quot;origin&quot;:&quot;searchPageUrl&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77a&quot;}],&quot;e4ab3d4f0ea86bebb04629f56c069e9c&quot;:[{&quot;origin&quot;:&quot;product&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77b&quot;}],&quot;46cb417b95efad524a67c4615875e035&quot;:[{&quot;origin&quot;:&quot;product&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77c&quot;}],&quot;caa37b6d744f967065b272cca5eeb693&quot;:[{&quot;origin&quot;:&quot;product&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77d&quot;},{&quot;origin&quot;:&quot;action&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77e&quot;}],&quot;4dbbd952ec9ff5ae3bd84215fe3ed686&quot;:[{&quot;origin&quot;:&quot;product&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77f&quot;}],&quot;402857eef7671c118012f69fe210a450&quot;:[{&quot;origin&quot;:&quot;product&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77g&quot;}],&quot;efafb36000c919a9834ec55ad7efb2b8&quot;:[],&quot;1e2019d92b8e09581963626092648138&quot;:[{&quot;origin&quot;:&quot;product&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77h&quot;}],&quot;98f1ff6c860c91055b77df1c8219ccaa&quot;:[{&quot;origin&quot;:&quot;pageInfo&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77i&quot;},{&quot;origin&quot;:&quot;product&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77j&quot;}],&quot;5248a628c0ba0eb2edc726fbc70778f8&quot;:[{&quot;origin&quot;:&quot;cartUrl&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77k&quot;},{&quot;origin&quot;:&quot;cart&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77l&quot;}],&quot;45515ab09f9ce8f561fc40ca4ffb7b2f&quot;:[{&quot;origin&quot;:&quot;pageInfo&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77m&quot;}],&quot;03ce62a99b643c53cea33f6fc2c573f5&quot;:[{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77n&quot;}],&quot;170528765f0295e4db900fd92ea387bc&quot;:[{&quot;origin&quot;:&quot;pageInfo&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77o&quot;},{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77p&quot;}],&quot;2aa0bf53e05360bd37f2dd0982998263&quot;:[],&quot;a20b83833c6ae10ded5077b0943cfef5&quot;:[{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77q&quot;}],&quot;18bf66723f1e3394e1ebb5dce01e8097&quot;:[],&quot;fef4b1d9ae2122930f9c33edbb982d6e&quot;:[{&quot;origin&quot;:&quot;customer&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77r&quot;},{&quot;origin&quot;:&quot;accountUrl&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77s&quot;},{&quot;origin&quot;:&quot;loginUrl&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77t&quot;}],&quot;b9b0aede0abb0546fe77c67089bdd6f5&quot;:[{&quot;origin&quot;:&quot;collection&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77u&quot;}],&quot;78d4735155d485f34d387c8394613fb7&quot;:[{&quot;origin&quot;:&quot;textWidget&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m77y&quot;}],&quot;d71e8a0220472a4a5360ae305aa98d5b&quot;:[{&quot;origin&quot;:&quot;basicMenuWidget&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m782&quot;}],&quot;e9869af9cb99540caac4704f0a1d6de86&quot;:[{&quot;origin&quot;:&quot;basicMenuWidget&quot;,&quot;alias&quot;:&quot;e5sb12rm1axz9vx&quot;}]},&quot;widgets&quot;:[{&quot;sortOrder&quot;:1,&quot;areaId&quot;:[&quot;header&quot;],&quot;type&quot;:&quot;basic_menu&quot;,&quot;id&quot;:&quot;e9869af9cb99540caac4704f0a1d6de86&quot;}]}&lt;/script&gt;&lt;link href&#x3D;&quot;/assets/frontStore/productView/client/a3f0705825866defa866.css&quot; rel&#x3D;&quot;stylesheet&quot;/&gt;&lt;title&gt;Nike React Phantom Run Flyknit 2&lt;/title&gt;&lt;meta name&#x3D;&quot;description&quot; content&#x3D;&quot;Nike React Phantom Run Flyknit 2&quot;/&gt;&lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1.0&quot;/&gt;&lt;/head&gt;&lt;body id&#x3D;&quot;body&quot;&gt;&lt;div id&#x3D;&quot;app&quot; class&#x3D;&quot;bg-background&quot;&gt;&lt;div class&#x3D;&quot;wrapper&quot;&gt;&lt;div class&#x3D;&quot;loading-bar&quot; style&#x3D;&quot;width:0%;display:none&quot;&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;header grid grid-cols-3&quot;&gt;&lt;div class&#x3D;&quot;&quot;&gt;&lt;div class&#x3D;&quot;flex justify-start gap-6 items-center&quot;&gt;&lt;nav class&#x3D;&quot;p-4 relative md:flex md:justify-center&quot;&gt;&lt;div class&#x3D;&quot;flex justify-between items-center&quot;&gt;&lt;div class&#x3D;&quot;md:hidden&quot;&gt;&lt;a href&#x3D;&quot;#&quot; class&#x3D;&quot;text-black focus:outline-none&quot;&gt;&lt;svg class&#x3D;&quot;w-9 h-9&quot; fill&#x3D;&quot;none&quot; stroke&#x3D;&quot;currentColor&quot; viewBox&#x3D;&quot;0 0 24 24&quot; xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;path stroke-linecap&#x3D;&quot;round&quot; stroke-linejoin&#x3D;&quot;round&quot; stroke-width&#x3D;&quot;2&quot; d&#x3D;&quot;M4 6h16M4 12h16m-7 6h7&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;&lt;ul class&#x3D;&quot;hidden  md:flex md:justify-center md:space-x-10 absolute md:relative left-[-2.5rem] md:left-0 top-full md:top-auto mt-2 md:mt-0 w-screen md:w-auto md:bg-transparent p-4 md:p-0 min-w-[250px] bg-white z-30 divide-y md:divide-y-0&quot;&gt;&lt;li class&#x3D;&quot;relative group&quot;&gt;&lt;a href&#x3D;&quot;javascript:void(0)&quot; class&#x3D;&quot;hover:text-gray-300 transition-colors block md:inline-block px-4 py-4 md:px-0 md:py-0&quot;&gt;Shop ❤️&lt;/a&gt;&lt;ul class&#x3D;&quot;md:absolute left-0 top-full mt-0 md:mt-3 w-48 bg-white md:shadow-lg rounded-md md:opacity-0 md:group-hover:opacity-100 md:group-hover:translate-y-0 transform transition-all duration-300 ease-in-out min-w-full md:min-w-[250px] z-30 md:border-t-4&quot;&gt;&lt;li&gt;&lt;a href&#x3D;&quot;/men&quot; class&#x3D;&quot;block px-8 md:px-4 py-3 text-gray-700 hover:bg-gray-100&quot;&gt;Men&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href&#x3D;&quot;/women&quot; class&#x3D;&quot;block px-8 md:px-4 py-3 text-gray-700 hover:bg-gray-100&quot;&gt;Women&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li class&#x3D;&quot;relative group&quot;&gt;&lt;a href&#x3D;&quot;/page/about-us&quot; class&#x3D;&quot;hover:text-gray-300 transition-colors block md:inline-block px-4 py-4 md:px-0 md:py-0&quot;&gt;About us&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/nav&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;logo md:ml-0 flex justify-center items-center&quot;&gt;&lt;a href&#x3D;&quot;/&quot; class&#x3D;&quot;logo-icon&quot;&gt;&lt;svg width&#x3D;&quot;128&quot; height&#x3D;&quot;146&quot; viewBox&#x3D;&quot;0 0 128 146&quot; fill&#x3D;&quot;none&quot; xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;path d&#x3D;&quot;M32.388 18.0772L1.15175 36.1544L1.05206 72.5081L0.985596 108.895L32.4213 127.039C49.7009 137.008 63.9567 145.182 64.1228 145.182C64.289 145.182 72.8956 140.264 83.2966 134.283C93.6644 128.268 107.82 120.127 114.732 116.139L127.26 108.895V101.119V93.3102L126.529 93.7089C126.097 93.9415 111.941 102.083 95.06 111.853C78.1459 121.622 64.156 129.531 63.9567 129.498C63.724 129.431 52.5587 123.051 39.1005 115.275L14.6099 101.152V72.5746V43.9967L25.6756 37.6165C31.7234 34.1274 42.8223 27.7472 50.2991 23.4273C57.7426 19.1073 63.9899 15.585 64.1228 15.585C64.2557 15.585 72.9288 20.5362 83.3963 26.5841L113.902 43.9967L118.713 41.1657L127.26 36.1544L113.902 28.5447C103.334 22.2974 64.3554 -0.033191 64.0231 3.90721e-05C63.8237 3.90721e-05 49.568 8.14142 32.388 18.0772Z&quot; fill&#x3D;&quot;#1F1F1F&quot;&gt;&lt;/path&gt;&lt;path d&#x3D;&quot;M96.0237 54.1983C78.9434 64.0677 64.721 72.2423 64.4219 72.3088C64.0896 72.4084 55.7488 67.7562 44.8826 61.509L25.9082 50.543V58.4186L25.9414 66.2609L44.3841 76.8945C54.5193 82.743 63.1591 87.6611 63.5911 87.8272C64.2557 88.0598 68.9079 85.5011 95.5585 70.1156C112.705 60.1798 126.861 51.9719 127.027 51.839C127.16 51.7061 127.227 48.1505 127.194 43.9302L127.094 36.2541L96.0237 54.1983Z&quot; fill&#x3D;&quot;#1F1F1F&quot;&gt;&lt;/path&gt;&lt;path d&#x3D;&quot;M123.771 66.7261C121.943 67.7562 107.854 75.8976 92.4349 84.8033C77.0161 93.7089 64.289 100.986 64.1228 100.986C63.9567 100.986 55.3501 96.0683 44.9491 90.0869L26.0744 79.1874L25.9747 86.8303C25.9082 92.6788 26.0079 94.5729 26.307 94.872C26.9383 95.4369 63.7241 116.604 64.1228 116.604C64.4551 116.604 126.496 80.8821 127.027 80.4169C127.16 80.284 127.227 76.7284 127.194 72.4749L127.094 64.7987L123.771 66.7261Z&quot; fill&#x3D;&quot;#1F1F1F&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;icon-wrapper flex justify-end space-x-4&quot;&gt;&lt;div class&#x3D;&quot;search-box&quot;&gt;&lt;a href&#x3D;&quot;#&quot; class&#x3D;&quot;search-icon&quot;&gt;&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; style&#x3D;&quot;width:2.2rem;height:2.2rem&quot; fill&#x3D;&quot;none&quot; viewBox&#x3D;&quot;0 0 24 24&quot; stroke&#x3D;&quot;currentColor&quot;&gt;&lt;path stroke-linecap&#x3D;&quot;round&quot; stroke-linejoin&#x3D;&quot;round&quot; stroke-width&#x3D;&quot;2&quot; d&#x3D;&quot;M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;mini-cart-wrapper self-center&quot;&gt;&lt;a class&#x3D;&quot;mini-cart-icon&quot; href&#x3D;&quot;/cart&quot;&gt;&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; fill&#x3D;&quot;none&quot; viewBox&#x3D;&quot;0 0 24 24&quot; stroke-width&#x3D;&quot;2&quot; stroke&#x3D;&quot;currentColor&quot; aria-hidden&#x3D;&quot;true&quot; width&#x3D;&quot;20&quot; height&#x3D;&quot;20&quot;&gt;&lt;path stroke-linecap&#x3D;&quot;round&quot; stroke-linejoin&#x3D;&quot;round&quot; d&#x3D;&quot;M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;self-center&quot;&gt;&lt;a href&#x3D;&quot;/account/login&quot;&gt;&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; fill&#x3D;&quot;none&quot; viewBox&#x3D;&quot;0 0 24 24&quot; stroke-width&#x3D;&quot;2&quot; stroke&#x3D;&quot;currentColor&quot; aria-hidden&#x3D;&quot;true&quot; width&#x3D;&quot;25&quot; height&#x3D;&quot;25&quot;&gt;&lt;path stroke-linecap&#x3D;&quot;round&quot; stroke-linejoin&#x3D;&quot;round&quot; d&#x3D;&quot;M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;main class&#x3D;&quot;content&quot;&gt;&lt;div class&#x3D;&quot;breadcrumb page-width my-8&quot;&gt;&lt;span&gt;&lt;a href&#x3D;&quot;/&quot; class&#x3D;&quot;text-interactive&quot;&gt;Home&lt;/a&gt;&lt;span&gt; / &lt;/span&gt;&lt;/span&gt;&lt;span&gt;&lt;a href&#x3D;&quot;/men&quot; class&#x3D;&quot;text-interactive&quot;&gt;Men&lt;/a&gt;&lt;span&gt; / &lt;/span&gt;&lt;/span&gt;&lt;span&gt;Nike React Phantom Run Flyknit 2&lt;/span&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;product-detail&quot;&gt;&lt;div class&#x3D;&quot;product-page-top&quot;&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;product-page-middle page-width&quot;&gt;&lt;div class&#x3D;&quot;grid grid-cols-1 gap-12 md:grid-cols-2&quot;&gt;&lt;div class&#x3D;&quot;&quot;&gt;&lt;div class&#x3D;&quot;product-single-media&quot;&gt;&lt;div id&#x3D;&quot;product-current-image&quot; style&#x3D;&quot;background:#f6f6f6&quot; class&#x3D;&quot;product-image product-single-page-image flex justify-center items-center&quot;&gt;&lt;img src&#x3D;&quot;https://demositefiles.blob.core.windows.net/images/catalog/5761/1580/plv5236-Black-single.png&quot; alt&#x3D;&quot;Nike react phantom run flyknit 2&quot; class&#x3D;&quot;self-center&quot;/&gt;&lt;/div&gt;&lt;ul class&#x3D;&quot;more-view-thumbnail product-gallery mt-8 grid grid-cols-4 gap-4&quot;&gt;&lt;li class&#x3D;&quot;flex justify-center items-center&quot;&gt;&lt;a href&#x3D;&quot;#&quot; class&#x3D;&quot;&quot;&gt;&lt;img class&#x3D;&quot;self-center&quot; src&#x3D;&quot;https://demositefiles.blob.core.windows.net/images/catalog/5069/8631/plv8794-Black-thumb.png&quot; alt&#x3D;&quot;Nike react phantom run flyknit 2&quot;/&gt;&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;&quot;&gt;&lt;div class&#x3D;&quot;flex flex-col gap-4&quot;&gt;&lt;h1 class&#x3D;&quot;product-single-name&quot;&gt;Nike react phantom run flyknit 2&lt;/h1&gt;&lt;h4 class&#x3D;&quot;product-single-price&quot;&gt;&lt;div&gt;&lt;span class&#x3D;&quot;sale-price&quot;&gt;$718.00&lt;/span&gt;&lt;/div&gt;&lt;/h4&gt;&lt;div class&#x3D;&quot;product-single-sku text-textSubdued&quot;&gt;&lt;span&gt;Sku&lt;/span&gt;&lt;span&gt;: &lt;/span&gt;NJC48508-Black-X&lt;/div&gt;&lt;div class&#x3D;&quot;specification&quot;&gt;&lt;ul class&#x3D;&quot;list-disc list-inside&quot;&gt;&lt;li&gt;&lt;strong&gt;Brand&lt;!-- --&gt;: &lt;/strong&gt; &lt;span&gt;Nike&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Color&lt;!-- --&gt;: &lt;/strong&gt; &lt;span&gt;Black&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;variant variant-container grid grid-cols-1 gap-4 mt-8&quot;&gt;&lt;div&gt;&lt;input type&#x3D;&quot;hidden&quot; name&#x3D;&quot;variant_options[0][attribute_id]&quot; value&#x3D;&quot;2&quot;/&gt;&lt;input type&#x3D;&quot;hidden&quot; name&#x3D;&quot;variant_options[0][optionId]&quot; value&#x3D;&quot;&quot;/&gt;&lt;div class&#x3D;&quot;mb-2 text-textSubdued uppercase&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;&lt;ul class&#x3D;&quot;variant-option-list flex justify-start gap-2 flex-wrap&quot;&gt;&lt;li class&#x3D;&quot;&quot;&gt;&lt;a href&#x3D;&quot;#&quot;&gt;X&lt;/a&gt;&lt;/li&gt;&lt;li class&#x3D;&quot;&quot;&gt;&lt;a href&#x3D;&quot;#&quot;&gt;S&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;div&gt;&lt;input type&#x3D;&quot;hidden&quot; name&#x3D;&quot;variant_options[1][attribute_id]&quot; value&#x3D;&quot;3&quot;/&gt;&lt;input type&#x3D;&quot;hidden&quot; name&#x3D;&quot;variant_options[1][optionId]&quot; value&#x3D;&quot;&quot;/&gt;&lt;div class&#x3D;&quot;mb-2 text-textSubdued uppercase&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;&lt;ul class&#x3D;&quot;variant-option-list flex justify-start gap-2 flex-wrap&quot;&gt;&lt;li class&#x3D;&quot;&quot;&gt;&lt;a href&#x3D;&quot;#&quot;&gt;Pink&lt;/a&gt;&lt;/li&gt;&lt;li class&#x3D;&quot;&quot;&gt;&lt;a href&#x3D;&quot;#&quot;&gt;Black&lt;/a&gt;&lt;/li&gt;&lt;li class&#x3D;&quot;&quot;&gt;&lt;a href&#x3D;&quot;#&quot;&gt;Green&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/div&gt;&lt;form id&#x3D;&quot;productForm&quot; action&#x3D;&quot;/api/cart/mine/items&quot; method&#x3D;&quot;POST&quot;&gt;&lt;input type&#x3D;&quot;hidden&quot; name&#x3D;&quot;sku&quot; value&#x3D;&quot;NJC48508-Black-X&quot;/&gt;&lt;div class&#x3D;&quot;&quot;&gt;&lt;div class&#x3D;&quot;add-to-cart mt-8&quot;&gt;&lt;div style&#x3D;&quot;width:8rem&quot;&gt;&lt;div class&#x3D;&quot;form-field-container null&quot;&gt;&lt;div class&#x3D;&quot;field-wrapper flex flex-grow&quot;&gt;&lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;qty&quot; placeholder&#x3D;&quot;Qty&quot; value&#x3D;&quot;1&quot;/&gt;&lt;div class&#x3D;&quot;field-border&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;mt-4&quot;&gt;&lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;button primary outline&quot;&gt;&lt;span&gt;ADD TO CART&lt;/span&gt;&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/form&gt;&lt;div class&#x3D;&quot;mt-8 md:mt-12&quot;&gt;&lt;div class&#x3D;&quot;product-description&quot;&gt;&lt;div class&#x3D;&quot;editor__html&quot;&gt;&lt;div class&#x3D;&quot;row__container mt-12 grid md:grid-cols-1 grid-cols-1 gap-8&quot;&gt;&lt;div class&#x3D;&quot;column__container md:col-span-1 col-span-1&quot;&gt;&lt;div class&#x3D;&quot;prose prose-base max-w-none&quot;&gt;&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum feugiat mi eget elit elementum, id pulvinar tellus eleifend.&lt;/p&gt;&lt;p&gt;Integer porttitor elit id euismod elementum. Nulla vel molestie massa, eget iaculis elit. Quisque a tortor vel lectus ultricies pretium quis non purus. Pellentesque molestie leo eget rutrum tristique.&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;product-page-top&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/main&gt;&lt;div class&#x3D;&quot;footer&quot;&gt;&lt;div class&#x3D;&quot;footer__default&quot;&gt;&lt;div class&#x3D;&quot;page-width grid grid-cols-1 md:grid-cols-2 gap-8 justify-between&quot;&gt;&lt;div&gt;&lt;div class&#x3D;&quot;card-icons flex justify-center space-x-4 md:justify-start&quot;&gt;&lt;div&gt;&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; width&#x3D;&quot;38&quot; height&#x3D;&quot;24&quot; aria-labelledby&#x3D;&quot;pi-visa&quot; viewBox&#x3D;&quot;0 0 38 24&quot;&gt;&lt;path d&#x3D;&quot;M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z&quot; opacity&#x3D;&quot;0.07&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#fff&quot; d&#x3D;&quot;M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#142688&quot; d&#x3D;&quot;M28.3 10.1H28c-.4 1-.7 1.5-1 3h1.9c-.3-1.5-.3-2.2-.6-3zm2.9 5.9h-1.7c-.1 0-.1 0-.2-.1l-.2-.9-.1-.2h-2.4c-.1 0-.2 0-.2.2l-.3.9c0 .1-.1.1-.1.1h-2.1l.2-.5L27 8.7c0-.5.3-.7.8-.7h1.5c.1 0 .2 0 .2.2l1.4 6.5c.1.4.2.7.2 1.1.1.1.1.1.1.2zm-13.4-.3l.4-1.8c.1 0 .2.1.2.1.7.3 1.4.5 2.1.4.2 0 .5-.1.7-.2.5-.2.5-.7.1-1.1-.2-.2-.5-.3-.8-.5-.4-.2-.8-.4-1.1-.7-1.2-1-.8-2.4-.1-3.1.6-.4.9-.8 1.7-.8 1.2 0 2.5 0 3.1.2h.1c-.1.6-.2 1.1-.4 1.7-.5-.2-1-.4-1.5-.4-.3 0-.6 0-.9.1-.2 0-.3.1-.4.2-.2.2-.2.5 0 .7l.5.4c.4.2.8.4 1.1.6.5.3 1 .8 1.1 1.4.2.9-.1 1.7-.9 2.3-.5.4-.7.6-1.4.6-1.4 0-2.5.1-3.4-.2-.1.2-.1.2-.2.1zm-3.5.3c.1-.7.1-.7.2-1 .5-2.2 1-4.5 1.4-6.7.1-.2.1-.3.3-.3H18c-.2 1.2-.4 2.1-.7 3.2-.3 1.5-.6 3-1 4.5 0 .2-.1.2-.3.2M5 8.2c0-.1.2-.2.3-.2h3.4c.5 0 .9.3 1 .8l.9 4.4c0 .1 0 .1.1.2 0-.1.1-.1.1-.1l2.1-5.1c-.1-.1 0-.2.1-.2h2.1c0 .1 0 .1-.1.2l-3.1 7.3c-.1.2-.1.3-.2.4-.1.1-.3 0-.5 0H9.7c-.1 0-.2 0-.2-.2L7.9 9.5c-.2-.2-.5-.5-.9-.6-.6-.3-1.7-.5-1.9-.5L5 8.2z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/div&gt;&lt;div&gt;&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; width&#x3D;&quot;38&quot; height&#x3D;&quot;24&quot; aria-labelledby&#x3D;&quot;pi-master&quot; viewBox&#x3D;&quot;0 0 38 24&quot;&gt;&lt;path d&#x3D;&quot;M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z&quot; opacity&#x3D;&quot;0.07&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#fff&quot; d&#x3D;&quot;M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32&quot;&gt;&lt;/path&gt;&lt;circle cx&#x3D;&quot;15&quot; cy&#x3D;&quot;12&quot; r&#x3D;&quot;7&quot; fill&#x3D;&quot;#EB001B&quot;&gt;&lt;/circle&gt;&lt;circle cx&#x3D;&quot;23&quot; cy&#x3D;&quot;12&quot; r&#x3D;&quot;7&quot; fill&#x3D;&quot;#F79E1B&quot;&gt;&lt;/circle&gt;&lt;path fill&#x3D;&quot;#FF5F00&quot; d&#x3D;&quot;M22 12c0-2.4-1.2-4.5-3-5.7-1.8 1.3-3 3.4-3 5.7s1.2 4.5 3 5.7c1.8-1.2 3-3.3 3-5.7z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/div&gt;&lt;div&gt;&lt;svg viewBox&#x3D;&quot;0 0 38 24&quot; xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; width&#x3D;&quot;38&quot; height&#x3D;&quot;24&quot; role&#x3D;&quot;img&quot; aria-labelledby&#x3D;&quot;pi-paypal&quot;&gt;&lt;title id&#x3D;&quot;pi-paypal&quot;&gt;PayPal&lt;/title&gt;&lt;path opacity&#x3D;&quot;.07&quot; d&#x3D;&quot;M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#fff&quot; d&#x3D;&quot;M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#003087&quot; d&#x3D;&quot;M23.9 8.3c.2-1 0-1.7-.6-2.3-.6-.7-1.7-1-3.1-1h-4.1c-.3 0-.5.2-.6.5L14 15.6c0 .2.1.4.3.4H17l.4-3.4 1.8-2.2 4.7-2.1z&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#3086C8&quot; d&#x3D;&quot;M23.9 8.3l-.2.2c-.5 2.8-2.2 3.8-4.6 3.8H18c-.3 0-.5.2-.6.5l-.6 3.9-.2 1c0 .2.1.4.3.4H19c.3 0 .5-.2.5-.4v-.1l.4-2.4v-.1c0-.2.3-.4.5-.4h.3c2.1 0 3.7-.8 4.1-3.2.2-1 .1-1.8-.4-2.4-.1-.5-.3-.7-.5-.8z&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#012169&quot; d&#x3D;&quot;M23.3 8.1c-.1-.1-.2-.1-.3-.1-.1 0-.2 0-.3-.1-.3-.1-.7-.1-1.1-.1h-3c-.1 0-.2 0-.2.1-.2.1-.3.2-.3.4l-.7 4.4v.1c0-.3.3-.5.6-.5h1.3c2.5 0 4.1-1 4.6-3.8v-.2c-.1-.1-.3-.2-.5-.2h-.1z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;self-center&quot;&gt;&lt;div class&#x3D;&quot;copyright text-center md:text-right text-textSubdued&quot;&gt;&lt;span&gt;© 2022 Evershop. All Rights Reserved.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div class&#x3D;&quot;Toastify&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;script src&#x3D;&quot;/assets/frontStore/productView/client/a3f0705825866defa866.js&quot;&gt;&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-58b6288f-3256-468b-8243-16d717e00d49">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <h5 class="alert alert-success text-uppercase text-center">No Tests for this request</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-c9518603-e497-417f-8638-0520ee866377" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-c9518603-e497-417f-8638-0520ee866377" aria-expanded="false" aria-controls="collapse" id="requests-c9518603-e497-417f-8638-0520ee866377" class="collapsed text-white z-block">
+                    Iteration: 1 - cart <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-c9518603-e497-417f-8638-0520ee866377" class="collapse" aria-labelledby="requests-c9518603-e497-417f-8638-0520ee866377">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="https://demo.evershop.io//cart" target="_blank">https://demo.evershop.io//cart</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 260ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 12.06KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar bg-success" style="width: 100%" role="progressbar">
+                                            <h5 class="text-uppercase text-white text-center" style="padding-top:5px;"><strong>No Tests for this request</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.39.1</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">6291811f-5a32-466c-ae8f-c543589f71a3</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">demo.evershop.io</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cookie</td>
+                                                        <td class="text-wrap">sid&#x3D;s%3AY7s8Yt-xftt3eQWf45E8o6ZRoXsDGoW6.Nav4DUhiDRgTUHxqb2HYptFIKAB3v1NgFpjvHm7Dzxw</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">12354</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">text/html; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Fri, 20 Sep 2024 16:35:27 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">ETag</td>
+                                                    <td class="text-wrap">W/&quot;3042-zP9aFgB5CUKzdQ3k+0ON6bHs4yE&quot;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">request-context</td>
+                                                    <td class="text-wrap">appId&#x3D;cid-v1:</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Powered-By</td>
+                                                    <td class="text-wrap">Express</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-358a5be2-5079-472a-913d-b36f91d32929" class="prettyPrint">&lt;!DOCTYPE html&gt;&lt;html id&#x3D;&quot;root&quot; lang&#x3D;&quot;en&quot;&gt;&lt;head&gt;&lt;meta charset&#x3D;&quot;utf-8&quot;/&gt;&lt;script&gt;var eContext &#x3D; {&quot;graphqlResponse&quot;:{&quot;e13kblpuxbnm122m786&quot;:&quot;/search&quot;,&quot;e13kblpuxbnm122m787&quot;:&quot;/cart&quot;,&quot;e13kblpuxbnm122m788&quot;:null,&quot;e13kblpuxbnm122m789&quot;:null,&quot;e13kblpuxbnm122m78a&quot;:{&quot;priceIncludingTax&quot;:true},&quot;e13kblpuxbnm122m78b&quot;:null,&quot;e13kblpuxbnm122m78c&quot;:{&quot;priceIncludingTax&quot;:true},&quot;e13kblpuxbnm122m78d&quot;:&quot;/checkout&quot;,&quot;e13kblpuxbnm122m78e&quot;:{&quot;breadcrumbs&quot;:[{&quot;title&quot;:&quot;Home&quot;,&quot;url&quot;:&quot;/&quot;},{&quot;title&quot;:&quot;Shopping cart&quot;,&quot;url&quot;:&quot;https://demo.evershop.io/cart&quot;}]},&quot;e13kblpuxbnm122m78f&quot;:{&quot;copyRight&quot;:&quot;\u00A9 2022 Evershop. All Rights Reserved.&quot;},&quot;e13kblpuxbnm122m78g&quot;:{&quot;title&quot;:&quot;Shopping cart&quot;,&quot;description&quot;:&quot;Shopping cart&quot;},&quot;e13kblpuxbnm122m78h&quot;:{&quot;headTags&quot;:{&quot;metas&quot;:[],&quot;links&quot;:[],&quot;scripts&quot;:[],&quot;base&quot;:null}},&quot;e13kblpuxbnm122m78i&quot;:{&quot;logo&quot;:{&quot;src&quot;:null,&quot;alt&quot;:null,&quot;width&quot;:null,&quot;height&quot;:null}},&quot;e13kblpuxbnm122m78j&quot;:null,&quot;e13kblpuxbnm122m78k&quot;:&quot;/account&quot;,&quot;e13kblpuxbnm122m78l&quot;:&quot;/account/login&quot;,&quot;e13kblpuxbnm122m78m&quot;:null,&quot;e5sb12rm1axza87&quot;:{&quot;menus&quot;:[{&quot;id&quot;:&quot;5sb12rm1axza8f&quot;,&quot;name&quot;:&quot;Shop \u2764\uFE0F&quot;,&quot;url&quot;:&quot;javascript:void(0)&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;javascript:void(0)&quot;,&quot;children&quot;:[{&quot;name&quot;:&quot;Men&quot;,&quot;url&quot;:&quot;/men&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/men&quot;},{&quot;name&quot;:&quot;Women&quot;,&quot;url&quot;:&quot;/women&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/women&quot;}]},{&quot;id&quot;:&quot;5sb12rm1axza8i&quot;,&quot;name&quot;:&quot;About us&quot;,&quot;url&quot;:&quot;/page/about-us&quot;,&quot;type&quot;:&quot;custom&quot;,&quot;uuid&quot;:&quot;/page/about-us&quot;,&quot;children&quot;:[]}],&quot;isMain&quot;:true,&quot;className&quot;:&quot;&quot;}},&quot;propsMap&quot;:{&quot;137dcfd8bf7950dd6201684efdcb40a1&quot;:[{&quot;origin&quot;:&quot;searchPageUrl&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m786&quot;}],&quot;5248a628c0ba0eb2edc726fbc70778f8&quot;:[{&quot;origin&quot;:&quot;cartUrl&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m787&quot;},{&quot;origin&quot;:&quot;cart&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m788&quot;}],&quot;87b5a6343580ffba5d3cd5dcf3da9b15&quot;:[{&quot;origin&quot;:&quot;cart&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m789&quot;},{&quot;origin&quot;:&quot;setting&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m78a&quot;}],&quot;0970d39aae36909e09c0cbec65369c02&quot;:[{&quot;origin&quot;:&quot;cart&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m78b&quot;},{&quot;origin&quot;:&quot;setting&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m78c&quot;},{&quot;origin&quot;:&quot;checkoutUrl&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m78d&quot;}],&quot;45515ab09f9ce8f561fc40ca4ffb7b2f&quot;:[{&quot;origin&quot;:&quot;pageInfo&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m78e&quot;}],&quot;03ce62a99b643c53cea33f6fc2c573f5&quot;:[{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m78f&quot;}],&quot;170528765f0295e4db900fd92ea387bc&quot;:[{&quot;origin&quot;:&quot;pageInfo&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m78g&quot;},{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m78h&quot;}],&quot;2aa0bf53e05360bd37f2dd0982998263&quot;:[],&quot;a20b83833c6ae10ded5077b0943cfef5&quot;:[{&quot;origin&quot;:&quot;themeConfig&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m78i&quot;}],&quot;18bf66723f1e3394e1ebb5dce01e8097&quot;:[],&quot;fef4b1d9ae2122930f9c33edbb982d6e&quot;:[{&quot;origin&quot;:&quot;customer&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m78j&quot;},{&quot;origin&quot;:&quot;accountUrl&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m78k&quot;},{&quot;origin&quot;:&quot;loginUrl&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m78l&quot;}],&quot;8bdf6e07d5f321c363037c0ecd754c6d&quot;:[{&quot;origin&quot;:&quot;cart&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m78m&quot;}],&quot;b9b0aede0abb0546fe77c67089bdd6f5&quot;:[{&quot;origin&quot;:&quot;collection&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m78n&quot;}],&quot;78d4735155d485f34d387c8394613fb7&quot;:[{&quot;origin&quot;:&quot;textWidget&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m78r&quot;}],&quot;d71e8a0220472a4a5360ae305aa98d5b&quot;:[{&quot;origin&quot;:&quot;basicMenuWidget&quot;,&quot;alias&quot;:&quot;e13kblpuxbnm122m78v&quot;}],&quot;e9869af9cb99540caac4704f0a1d6de86&quot;:[{&quot;origin&quot;:&quot;basicMenuWidget&quot;,&quot;alias&quot;:&quot;e5sb12rm1axza87&quot;}]},&quot;widgets&quot;:[{&quot;sortOrder&quot;:1,&quot;areaId&quot;:[&quot;header&quot;],&quot;type&quot;:&quot;basic_menu&quot;,&quot;id&quot;:&quot;e9869af9cb99540caac4704f0a1d6de86&quot;}]}&lt;/script&gt;&lt;link href&#x3D;&quot;/assets/frontStore/cart/client/a3f0705825866defa866.css&quot; rel&#x3D;&quot;stylesheet&quot;/&gt;&lt;title&gt;Shopping cart&lt;/title&gt;&lt;meta name&#x3D;&quot;description&quot; content&#x3D;&quot;Shopping cart&quot;/&gt;&lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, initial-scale&#x3D;1.0&quot;/&gt;&lt;/head&gt;&lt;body id&#x3D;&quot;body&quot;&gt;&lt;div id&#x3D;&quot;app&quot; class&#x3D;&quot;bg-background&quot;&gt;&lt;div class&#x3D;&quot;wrapper&quot;&gt;&lt;div class&#x3D;&quot;loading-bar&quot; style&#x3D;&quot;width:0%;display:none&quot;&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;header grid grid-cols-3&quot;&gt;&lt;div class&#x3D;&quot;&quot;&gt;&lt;div class&#x3D;&quot;flex justify-start gap-6 items-center&quot;&gt;&lt;nav class&#x3D;&quot;p-4 relative md:flex md:justify-center&quot;&gt;&lt;div class&#x3D;&quot;flex justify-between items-center&quot;&gt;&lt;div class&#x3D;&quot;md:hidden&quot;&gt;&lt;a href&#x3D;&quot;#&quot; class&#x3D;&quot;text-black focus:outline-none&quot;&gt;&lt;svg class&#x3D;&quot;w-9 h-9&quot; fill&#x3D;&quot;none&quot; stroke&#x3D;&quot;currentColor&quot; viewBox&#x3D;&quot;0 0 24 24&quot; xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;path stroke-linecap&#x3D;&quot;round&quot; stroke-linejoin&#x3D;&quot;round&quot; stroke-width&#x3D;&quot;2&quot; d&#x3D;&quot;M4 6h16M4 12h16m-7 6h7&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;&lt;ul class&#x3D;&quot;hidden  md:flex md:justify-center md:space-x-10 absolute md:relative left-[-2.5rem] md:left-0 top-full md:top-auto mt-2 md:mt-0 w-screen md:w-auto md:bg-transparent p-4 md:p-0 min-w-[250px] bg-white z-30 divide-y md:divide-y-0&quot;&gt;&lt;li class&#x3D;&quot;relative group&quot;&gt;&lt;a href&#x3D;&quot;javascript:void(0)&quot; class&#x3D;&quot;hover:text-gray-300 transition-colors block md:inline-block px-4 py-4 md:px-0 md:py-0&quot;&gt;Shop ❤️&lt;/a&gt;&lt;ul class&#x3D;&quot;md:absolute left-0 top-full mt-0 md:mt-3 w-48 bg-white md:shadow-lg rounded-md md:opacity-0 md:group-hover:opacity-100 md:group-hover:translate-y-0 transform transition-all duration-300 ease-in-out min-w-full md:min-w-[250px] z-30 md:border-t-4&quot;&gt;&lt;li&gt;&lt;a href&#x3D;&quot;/men&quot; class&#x3D;&quot;block px-8 md:px-4 py-3 text-gray-700 hover:bg-gray-100&quot;&gt;Men&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href&#x3D;&quot;/women&quot; class&#x3D;&quot;block px-8 md:px-4 py-3 text-gray-700 hover:bg-gray-100&quot;&gt;Women&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li class&#x3D;&quot;relative group&quot;&gt;&lt;a href&#x3D;&quot;/page/about-us&quot; class&#x3D;&quot;hover:text-gray-300 transition-colors block md:inline-block px-4 py-4 md:px-0 md:py-0&quot;&gt;About us&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/nav&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;logo md:ml-0 flex justify-center items-center&quot;&gt;&lt;a href&#x3D;&quot;/&quot; class&#x3D;&quot;logo-icon&quot;&gt;&lt;svg width&#x3D;&quot;128&quot; height&#x3D;&quot;146&quot; viewBox&#x3D;&quot;0 0 128 146&quot; fill&#x3D;&quot;none&quot; xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;path d&#x3D;&quot;M32.388 18.0772L1.15175 36.1544L1.05206 72.5081L0.985596 108.895L32.4213 127.039C49.7009 137.008 63.9567 145.182 64.1228 145.182C64.289 145.182 72.8956 140.264 83.2966 134.283C93.6644 128.268 107.82 120.127 114.732 116.139L127.26 108.895V101.119V93.3102L126.529 93.7089C126.097 93.9415 111.941 102.083 95.06 111.853C78.1459 121.622 64.156 129.531 63.9567 129.498C63.724 129.431 52.5587 123.051 39.1005 115.275L14.6099 101.152V72.5746V43.9967L25.6756 37.6165C31.7234 34.1274 42.8223 27.7472 50.2991 23.4273C57.7426 19.1073 63.9899 15.585 64.1228 15.585C64.2557 15.585 72.9288 20.5362 83.3963 26.5841L113.902 43.9967L118.713 41.1657L127.26 36.1544L113.902 28.5447C103.334 22.2974 64.3554 -0.033191 64.0231 3.90721e-05C63.8237 3.90721e-05 49.568 8.14142 32.388 18.0772Z&quot; fill&#x3D;&quot;#1F1F1F&quot;&gt;&lt;/path&gt;&lt;path d&#x3D;&quot;M96.0237 54.1983C78.9434 64.0677 64.721 72.2423 64.4219 72.3088C64.0896 72.4084 55.7488 67.7562 44.8826 61.509L25.9082 50.543V58.4186L25.9414 66.2609L44.3841 76.8945C54.5193 82.743 63.1591 87.6611 63.5911 87.8272C64.2557 88.0598 68.9079 85.5011 95.5585 70.1156C112.705 60.1798 126.861 51.9719 127.027 51.839C127.16 51.7061 127.227 48.1505 127.194 43.9302L127.094 36.2541L96.0237 54.1983Z&quot; fill&#x3D;&quot;#1F1F1F&quot;&gt;&lt;/path&gt;&lt;path d&#x3D;&quot;M123.771 66.7261C121.943 67.7562 107.854 75.8976 92.4349 84.8033C77.0161 93.7089 64.289 100.986 64.1228 100.986C63.9567 100.986 55.3501 96.0683 44.9491 90.0869L26.0744 79.1874L25.9747 86.8303C25.9082 92.6788 26.0079 94.5729 26.307 94.872C26.9383 95.4369 63.7241 116.604 64.1228 116.604C64.4551 116.604 126.496 80.8821 127.027 80.4169C127.16 80.284 127.227 76.7284 127.194 72.4749L127.094 64.7987L123.771 66.7261Z&quot; fill&#x3D;&quot;#1F1F1F&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;icon-wrapper flex justify-end space-x-4&quot;&gt;&lt;div class&#x3D;&quot;search-box&quot;&gt;&lt;a href&#x3D;&quot;#&quot; class&#x3D;&quot;search-icon&quot;&gt;&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; style&#x3D;&quot;width:2.2rem;height:2.2rem&quot; fill&#x3D;&quot;none&quot; viewBox&#x3D;&quot;0 0 24 24&quot; stroke&#x3D;&quot;currentColor&quot;&gt;&lt;path stroke-linecap&#x3D;&quot;round&quot; stroke-linejoin&#x3D;&quot;round&quot; stroke-width&#x3D;&quot;2&quot; d&#x3D;&quot;M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;mini-cart-wrapper self-center&quot;&gt;&lt;a class&#x3D;&quot;mini-cart-icon&quot; href&#x3D;&quot;/cart&quot;&gt;&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; fill&#x3D;&quot;none&quot; viewBox&#x3D;&quot;0 0 24 24&quot; stroke-width&#x3D;&quot;2&quot; stroke&#x3D;&quot;currentColor&quot; aria-hidden&#x3D;&quot;true&quot; width&#x3D;&quot;20&quot; height&#x3D;&quot;20&quot;&gt;&lt;path stroke-linecap&#x3D;&quot;round&quot; stroke-linejoin&#x3D;&quot;round&quot; d&#x3D;&quot;M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;self-center&quot;&gt;&lt;a href&#x3D;&quot;/account/login&quot;&gt;&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; fill&#x3D;&quot;none&quot; viewBox&#x3D;&quot;0 0 24 24&quot; stroke-width&#x3D;&quot;2&quot; stroke&#x3D;&quot;currentColor&quot; aria-hidden&#x3D;&quot;true&quot; width&#x3D;&quot;25&quot; height&#x3D;&quot;25&quot;&gt;&lt;path stroke-linecap&#x3D;&quot;round&quot; stroke-linejoin&#x3D;&quot;round&quot; d&#x3D;&quot;M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;main class&#x3D;&quot;content&quot;&gt;&lt;div class&#x3D;&quot;breadcrumb page-width my-8&quot;&gt;&lt;span&gt;&lt;a href&#x3D;&quot;/&quot; class&#x3D;&quot;text-interactive&quot;&gt;Home&lt;/a&gt;&lt;span&gt; / &lt;/span&gt;&lt;/span&gt;&lt;span&gt;Shopping cart&lt;/span&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;empty-shopping-cart w-100&quot; style&#x3D;&quot;margin-top:150px&quot;&gt;&lt;div&gt;&lt;div class&#x3D;&quot;text-center&quot;&gt;&lt;h2&gt;Shopping cart&lt;/h2&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;mt-8 text-center&quot;&gt;&lt;span&gt;Your cart is empty!&lt;/span&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;flex justify-center mt-8&quot;&gt;&lt;a href&#x3D;&quot;/&quot; class&#x3D;&quot;button primary&quot;&gt;&lt;span&gt;&lt;span class&#x3D;&quot;flex space-x-4&quot;&gt;&lt;span class&#x3D;&quot;self-center&quot;&gt;CONTINUE SHOPPING&lt;/span&gt; &lt;svg class&#x3D;&quot;self-center&quot; style&#x3D;&quot;width:2.5rem;height:2.5rem&quot; xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; fill&#x3D;&quot;none&quot; viewBox&#x3D;&quot;0 0 24 24&quot; stroke&#x3D;&quot;currentColor&quot;&gt;&lt;path stroke-linecap&#x3D;&quot;round&quot; stroke-linejoin&#x3D;&quot;round&quot; stroke-width&#x3D;&quot;1&quot; d&#x3D;&quot;M17 8l4 4m0 0l-4 4m4-4H3&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/main&gt;&lt;div class&#x3D;&quot;footer&quot;&gt;&lt;div class&#x3D;&quot;footer__default&quot;&gt;&lt;div class&#x3D;&quot;page-width grid grid-cols-1 md:grid-cols-2 gap-8 justify-between&quot;&gt;&lt;div&gt;&lt;div class&#x3D;&quot;card-icons flex justify-center space-x-4 md:justify-start&quot;&gt;&lt;div&gt;&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; width&#x3D;&quot;38&quot; height&#x3D;&quot;24&quot; aria-labelledby&#x3D;&quot;pi-visa&quot; viewBox&#x3D;&quot;0 0 38 24&quot;&gt;&lt;path d&#x3D;&quot;M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z&quot; opacity&#x3D;&quot;0.07&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#fff&quot; d&#x3D;&quot;M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#142688&quot; d&#x3D;&quot;M28.3 10.1H28c-.4 1-.7 1.5-1 3h1.9c-.3-1.5-.3-2.2-.6-3zm2.9 5.9h-1.7c-.1 0-.1 0-.2-.1l-.2-.9-.1-.2h-2.4c-.1 0-.2 0-.2.2l-.3.9c0 .1-.1.1-.1.1h-2.1l.2-.5L27 8.7c0-.5.3-.7.8-.7h1.5c.1 0 .2 0 .2.2l1.4 6.5c.1.4.2.7.2 1.1.1.1.1.1.1.2zm-13.4-.3l.4-1.8c.1 0 .2.1.2.1.7.3 1.4.5 2.1.4.2 0 .5-.1.7-.2.5-.2.5-.7.1-1.1-.2-.2-.5-.3-.8-.5-.4-.2-.8-.4-1.1-.7-1.2-1-.8-2.4-.1-3.1.6-.4.9-.8 1.7-.8 1.2 0 2.5 0 3.1.2h.1c-.1.6-.2 1.1-.4 1.7-.5-.2-1-.4-1.5-.4-.3 0-.6 0-.9.1-.2 0-.3.1-.4.2-.2.2-.2.5 0 .7l.5.4c.4.2.8.4 1.1.6.5.3 1 .8 1.1 1.4.2.9-.1 1.7-.9 2.3-.5.4-.7.6-1.4.6-1.4 0-2.5.1-3.4-.2-.1.2-.1.2-.2.1zm-3.5.3c.1-.7.1-.7.2-1 .5-2.2 1-4.5 1.4-6.7.1-.2.1-.3.3-.3H18c-.2 1.2-.4 2.1-.7 3.2-.3 1.5-.6 3-1 4.5 0 .2-.1.2-.3.2M5 8.2c0-.1.2-.2.3-.2h3.4c.5 0 .9.3 1 .8l.9 4.4c0 .1 0 .1.1.2 0-.1.1-.1.1-.1l2.1-5.1c-.1-.1 0-.2.1-.2h2.1c0 .1 0 .1-.1.2l-3.1 7.3c-.1.2-.1.3-.2.4-.1.1-.3 0-.5 0H9.7c-.1 0-.2 0-.2-.2L7.9 9.5c-.2-.2-.5-.5-.9-.6-.6-.3-1.7-.5-1.9-.5L5 8.2z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/div&gt;&lt;div&gt;&lt;svg xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; width&#x3D;&quot;38&quot; height&#x3D;&quot;24&quot; aria-labelledby&#x3D;&quot;pi-master&quot; viewBox&#x3D;&quot;0 0 38 24&quot;&gt;&lt;path d&#x3D;&quot;M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z&quot; opacity&#x3D;&quot;0.07&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#fff&quot; d&#x3D;&quot;M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32&quot;&gt;&lt;/path&gt;&lt;circle cx&#x3D;&quot;15&quot; cy&#x3D;&quot;12&quot; r&#x3D;&quot;7&quot; fill&#x3D;&quot;#EB001B&quot;&gt;&lt;/circle&gt;&lt;circle cx&#x3D;&quot;23&quot; cy&#x3D;&quot;12&quot; r&#x3D;&quot;7&quot; fill&#x3D;&quot;#F79E1B&quot;&gt;&lt;/circle&gt;&lt;path fill&#x3D;&quot;#FF5F00&quot; d&#x3D;&quot;M22 12c0-2.4-1.2-4.5-3-5.7-1.8 1.3-3 3.4-3 5.7s1.2 4.5 3 5.7c1.8-1.2 3-3.3 3-5.7z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/div&gt;&lt;div&gt;&lt;svg viewBox&#x3D;&quot;0 0 38 24&quot; xmlns&#x3D;&quot;http://www.w3.org/2000/svg&quot; width&#x3D;&quot;38&quot; height&#x3D;&quot;24&quot; role&#x3D;&quot;img&quot; aria-labelledby&#x3D;&quot;pi-paypal&quot;&gt;&lt;title id&#x3D;&quot;pi-paypal&quot;&gt;PayPal&lt;/title&gt;&lt;path opacity&#x3D;&quot;.07&quot; d&#x3D;&quot;M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#fff&quot; d&#x3D;&quot;M35 1c1.1 0 2 .9 2 2v18c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2h32&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#003087&quot; d&#x3D;&quot;M23.9 8.3c.2-1 0-1.7-.6-2.3-.6-.7-1.7-1-3.1-1h-4.1c-.3 0-.5.2-.6.5L14 15.6c0 .2.1.4.3.4H17l.4-3.4 1.8-2.2 4.7-2.1z&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#3086C8&quot; d&#x3D;&quot;M23.9 8.3l-.2.2c-.5 2.8-2.2 3.8-4.6 3.8H18c-.3 0-.5.2-.6.5l-.6 3.9-.2 1c0 .2.1.4.3.4H19c.3 0 .5-.2.5-.4v-.1l.4-2.4v-.1c0-.2.3-.4.5-.4h.3c2.1 0 3.7-.8 4.1-3.2.2-1 .1-1.8-.4-2.4-.1-.5-.3-.7-.5-.8z&quot;&gt;&lt;/path&gt;&lt;path fill&#x3D;&quot;#012169&quot; d&#x3D;&quot;M23.3 8.1c-.1-.1-.2-.1-.3-.1-.1 0-.2 0-.3-.1-.3-.1-.7-.1-1.1-.1h-3c-.1 0-.2 0-.2.1-.2.1-.3.2-.3.4l-.7 4.4v.1c0-.3.3-.5.6-.5h1.3c2.5 0 4.1-1 4.6-3.8v-.2c-.1-.1-.3-.2-.5-.2h-.1z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class&#x3D;&quot;self-center&quot;&gt;&lt;div class&#x3D;&quot;copyright text-center md:text-right text-textSubdued&quot;&gt;&lt;span&gt;© 2022 Evershop. All Rights Reserved.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div class&#x3D;&quot;Toastify&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;script src&#x3D;&quot;/assets/frontStore/cart/client/a3f0705825866defa866.js&quot;&gt;&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-358a5be2-5079-472a-913d-b36f91d32929">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <h5 class="alert alert-success text-uppercase text-center">No Tests for this request</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- Set slider initial position depending on the localstorage state -->
+
+<script>
+(function () {
+  var sliderChecked = true;
+  if (localStorage.getItem('theme') === 'theme-light') {
+    setTheme('theme-light');
+    sliderChecked = false;
+  } else {
+    setTheme('theme-dark');
+    sliderChecked = true;
+  }
+  $(document).ready( function () {
+    document.getElementById('slider').checked = sliderChecked;
+  });
+})();
+</script>
+
+<!-- Data Table Configuration -->
+
+<script>
+$(document).ready( function () {
+    $('.datatable').DataTable({
+        "retrieve": true,
+        "paging": false,
+        "info": false,
+        "fixedColumns":   {
+            "heightMatch": 'none'
+        }
+    });
+});
+</script>
+
+<!-- Tooltip Configuration -->
+
+<script>
+$(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip({
+        trigger : 'hover'
+    })
+})
+</script>
+
+<!-- Show/Hide The Folders -->
+
+<script>
+$('#openAll').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#folder-cd4e48f7-0885-4a4c-ac3d-c24b0f3e1db7-iteration-0').removeClass('collapsed')
+            $('#folder-collapse-cd4e48f7-0885-4a4c-ac3d-c24b0f3e1db7-iteration-0').addClass('show')
+        $('#openAll').html("Collapse Folders");
+        break;
+    case 2:
+            $('#folder-cd4e48f7-0885-4a4c-ac3d-c24b0f3e1db7-iteration-0').addClass('collapsed')
+            $('#folder-collapse-cd4e48f7-0885-4a4c-ac3d-c24b0f3e1db7-iteration-0').removeClass('show')
+        $('#openAll').html("Expand Folders");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Requests -->
+
+<script>
+$('#openAllRequests').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#requests-fd123068-797f-4e50-8502-1cd561f70005').removeClass('collapsed')
+            $('#collapse-fd123068-797f-4e50-8502-1cd561f70005').removeClass('collapsed')
+            $('#requests-fd123068-797f-4e50-8502-1cd561f70005').addClass('show')
+            $('#collapse-fd123068-797f-4e50-8502-1cd561f70005').addClass('show')
+            $('#requests-6d2775aa-8bd0-48ec-9b81-701d844bb589').removeClass('collapsed')
+            $('#collapse-6d2775aa-8bd0-48ec-9b81-701d844bb589').removeClass('collapsed')
+            $('#requests-6d2775aa-8bd0-48ec-9b81-701d844bb589').addClass('show')
+            $('#collapse-6d2775aa-8bd0-48ec-9b81-701d844bb589').addClass('show')
+            $('#requests-c9518603-e497-417f-8638-0520ee866377').removeClass('collapsed')
+            $('#collapse-c9518603-e497-417f-8638-0520ee866377').removeClass('collapsed')
+            $('#requests-c9518603-e497-417f-8638-0520ee866377').addClass('show')
+            $('#collapse-c9518603-e497-417f-8638-0520ee866377').addClass('show')
+        $('#openAllRequests').html("Collapse Requests");
+        break;
+    case 2:
+            $('#requests-fd123068-797f-4e50-8502-1cd561f70005').addClass('collapsed')
+            $('#collapse-fd123068-797f-4e50-8502-1cd561f70005').addClass('collapsed')
+            $('#requests-fd123068-797f-4e50-8502-1cd561f70005').removeClass('show')
+            $('#collapse-fd123068-797f-4e50-8502-1cd561f70005').removeClass('show')
+            $('#requests-6d2775aa-8bd0-48ec-9b81-701d844bb589').addClass('collapsed')
+            $('#collapse-6d2775aa-8bd0-48ec-9b81-701d844bb589').addClass('collapsed')
+            $('#requests-6d2775aa-8bd0-48ec-9b81-701d844bb589').removeClass('show')
+            $('#collapse-6d2775aa-8bd0-48ec-9b81-701d844bb589').removeClass('show')
+            $('#requests-c9518603-e497-417f-8638-0520ee866377').addClass('collapsed')
+            $('#collapse-c9518603-e497-417f-8638-0520ee866377').addClass('collapsed')
+            $('#requests-c9518603-e497-417f-8638-0520ee866377').removeClass('show')
+            $('#collapse-c9518603-e497-417f-8638-0520ee866377').removeClass('show')
+        $('#openAllRequests').html("Expand Requests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Skipped Tests -->
+
+<script>
+$('#openAllSkipped').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#skipped-fd123068-797f-4e50-8502-1cd561f70005').removeClass('collapsed')
+            $('#skipped-collapse-fd123068-797f-4e50-8502-1cd561f70005').removeClass('collapsed')
+            $('#skipped-fd123068-797f-4e50-8502-1cd561f70005').addClass('show')
+            $('#skipped-collapse-fd123068-797f-4e50-8502-1cd561f70005').addClass('show')
+            $('#skipped-6d2775aa-8bd0-48ec-9b81-701d844bb589').removeClass('collapsed')
+            $('#skipped-collapse-6d2775aa-8bd0-48ec-9b81-701d844bb589').removeClass('collapsed')
+            $('#skipped-6d2775aa-8bd0-48ec-9b81-701d844bb589').addClass('show')
+            $('#skipped-collapse-6d2775aa-8bd0-48ec-9b81-701d844bb589').addClass('show')
+            $('#skipped-c9518603-e497-417f-8638-0520ee866377').removeClass('collapsed')
+            $('#skipped-collapse-c9518603-e497-417f-8638-0520ee866377').removeClass('collapsed')
+            $('#skipped-c9518603-e497-417f-8638-0520ee866377').addClass('show')
+            $('#skipped-collapse-c9518603-e497-417f-8638-0520ee866377').addClass('show')
+        $('#openAllSkipped').html("Collapse All Skipped Tests");
+        break;
+    case 2:
+            $('#skipped-fd123068-797f-4e50-8502-1cd561f70005').addClass('collapsed')
+            $('#skipped-collapse-fd123068-797f-4e50-8502-1cd561f70005').addClass('collapsed')
+            $('#skipped-fd123068-797f-4e50-8502-1cd561f70005').removeClass('show')
+            $('#skipped-collapse-fd123068-797f-4e50-8502-1cd561f70005').removeClass('show')
+            $('#skipped-6d2775aa-8bd0-48ec-9b81-701d844bb589').addClass('collapsed')
+            $('#skipped-collapse-6d2775aa-8bd0-48ec-9b81-701d844bb589').addClass('collapsed')
+            $('#skipped-6d2775aa-8bd0-48ec-9b81-701d844bb589').removeClass('show')
+            $('#skipped-collapse-6d2775aa-8bd0-48ec-9b81-701d844bb589').removeClass('show')
+            $('#skipped-c9518603-e497-417f-8638-0520ee866377').addClass('collapsed')
+            $('#skipped-collapse-c9518603-e497-417f-8638-0520ee866377').addClass('collapsed')
+            $('#skipped-c9518603-e497-417f-8638-0520ee866377').removeClass('show')
+            $('#skipped-collapse-c9518603-e497-417f-8638-0520ee866377').removeClass('show')
+        $('#openAllSkipped').html("Expand All Skipped Tests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Failures -->
+
+<script>
+$('#openAllFailed').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+let failedItemContent
+let failedItemHeading
+switch (clickCount){
+    case 1:
+        $('#openAllFailed').html("Collapse All Failed Tests");
+        break;
+    case 2:
+        $('#openAllFailed').html("Expand All Failed Tests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Pretty Print the Response Body-->
+
+<script>
+function isJSON(data)
+{
+    var ret = true;
+    try {
+            JSON.parse(data);
+    }catch(e) {
+            ret = false;
+    }
+    return ret;
+}
+
+function isXML(data)
+{
+    return (data.length > 0 && data[0] === '<');
+}
+
+// see https://gist.github.com/sente/1083506/d2834134cd070dbcc08bf42ee27dabb746a1c54d#gistcomment-2254622
+function formatXML(data) {
+    const PADDING = ' '.repeat(2); // set desired indent size here
+    const reg = /(>)(<)(\/*)/g;
+    let pad = 0;
+    xml = data.replace(reg, '$1\r\n$2$3');
+
+    return xml.split('\r\n').map((node, index) => {
+        let indent = 0;
+        if (node.match(/.+<\/\w[^>]*>$/)) {
+            indent = 0;
+        } else if (node.match(/^<\/\w/) && pad > 0) {
+            pad -= 1;
+        } else if (node.match(/^<\w[^>]*[^\/]>.*$/)) {
+            indent = 1;
+        } else {
+            indent = 0;
+        }
+
+        pad += indent;
+        return PADDING.repeat(pad - indent) + node;
+    }).join('\r\n');
+}
+
+$(".prettyPrint").each(function () {
+        var data = $(this).text();
+        // Verify whether data is JSON
+        if(isJSON(data))
+        {
+                obj = JSON.parse(data);
+                data = JSON.stringify(obj, null, 2);
+        }
+        else if(isXML(data)) {
+            data = formatXML(data);
+        }
+        $(this).text(data);
+});
+</script>
+
+
+<!-- Copy Response Body To Clipboard -->
+
+<script>
+    var clipboard = new ClipboardJS('.copyButton');
+
+    clipboard.on('success', function(e) {
+        e.clearSelection();
+        $(".copyButton").addClass("bg-success text-white")
+        e.trigger.textContent = '✔ Copied!';
+        window.setTimeout(function() {
+            $(".copyButton").removeClass("bg-success text-white")
+            e.trigger.textContent = 'Copy to Clipboard';
+        }, 2000);
+    });
+    clipboard.on('error', function(e) {
+        e.clearSelection();
+        $(".copyButton").addClass("bg-danger text-white")
+        e.trigger.textContent = '✗ Not Copied';
+        window.setTimeout(function() {
+            $(".copyButton").removeClass("bg-danger text-white")
+            e.trigger.textContent = 'Copy to Clipboard';
+        }, 2000);
+    });
+
+</script>
+
+<!-- Render the Description Markdown and link in the test failures -->
+
+<script>
+    const remarkable = new Remarkable();
+
+    const descriptions = document.querySelectorAll(".renderMarkdown");
+    descriptions.forEach(description => {
+        description.innerHTML = renderHtmlFromMarkdown(description.textContent);
+    });
+    function renderHtmlFromMarkdown(markdown) {
+        return remarkable.render(trim(markdown));
+    }
+    function trim(string) {
+        return string ? string.replace(/^ +| +$/gm, "") : string;
+    }
+</script>
+
+<!-- Show/Hide The Toggles When Scrolling The Page -->
+
+<script>
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    document.getElementById("topOfRequestsScreen").style.display = "block";
+    document.getElementById("topOfFailuresScreen").style.display = "block";
+    document.getElementById("topOfSkippedScreen").style.display = "block";
+    document.getElementById("openAll").style.display = "none";
+    document.getElementById("openAllRequests").style.display = "none";
+
+
+  } else {
+    document.getElementById("topOfRequestsScreen").style.display = "none";
+    document.getElementById("topOfFailuresScreen").style.display = "none";
+    document.getElementById("topOfSkippedScreen").style.display = "none";
+    document.getElementById("openAll").style.display = "block";
+    document.getElementById("openAllRequests").style.display = "block";
+
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+<!-- Creates The Iteration Tabs -->
+
+<script type="text/javascript">
+    "use strict";
+
+window.onload = function () {
+
+  // set display for all blocks of response
+  var allItems = document.querySelectorAll('[class*=iteration-]');
+  allItems.forEach(function(elem){
+    elem.style.display = 'block';
+  });
+
+   
+  let totalIterations = 1;
+   
+
+  let menu = document.querySelector('#execution-menu .nav');
+
+  for(var i = 0; i < totalIterations; i++)
+  {
+    let li = document.createElement('li');
+    li.appendChild(document.createTextNode((i + 1)));
+    li.setAttribute('id', 'iteration-' + i);
+    li.classList.add("custom-tab");
+    li.classList.add("itPassed");
+
+    li.addEventListener('click', function() {
+      //set display to none for all except row
+      let allItems = document.querySelectorAll('[class*=iteration-]:not(.row)');
+      allItems.forEach(function(elem) {
+        elem.style.display = 'none';
+      })
+
+      let allMenus = document.querySelectorAll('[id*=iteration-]');
+      allMenus.forEach(function(elem){
+        elem.style.borderBottom = 'none';
+      })
+
+      this.style.borderBottom = 'solid 3px #032a33';
+
+      let items = document.querySelectorAll("." + this.id + ':not(.row)');
+      items.forEach(function(elem) {
+        elem.style.display = elem.style.display == 'block' ? 'none' : 'block';
+      })
+    });
+    menu.appendChild(li);
+  }
+
+  //shows first tab data
+  document.getElementById('iteration-0').click();
+  document.getElementById('iterationSelected').innerHTML = `Iteration ${document.getElementById('iteration-0').innerHTML} selected`
+
+}
+</script>
+
+<!-- Create the Selected Iteration Label -->
+
+<script>
+$(document).ready(function(){
+    $(function() {
+        $("#iterationList li").click(function() {
+            document.getElementById('iterationSelected').innerHTML = "Iteration " + this.innerHTML + " selected"
+        });
+    });
+});
+</script>
+
+<!-- Filter Action for the Iterations -->
+
+<script>
+$("#filterInput").on("input paste", function() {
+    var value = $(this).val();
+    $("#iterationList li").filter(function() {
+	    $("#showOnlyFailures").data("clickCount") ? $("#showOnlyFailures").click():null;
+        $(this).toggle($(this).text().indexOf(value) > -1)
+    });
+});
+</script>
+
+<!-- Showing the Failed Interations -->
+
+<script>
+$('#showOnlyFailures').on('click', function(e) {
+    let clickCount = $(this).data("clickCount") || 1
+	$("#filterInput").val()!="" && clickCount==1 ? $("#filterInput").val('').trigger('input'): null;
+    let selectedIteration = $('#iterationList li').filter(function () {
+        return $(this).css('border-bottom').indexOf("solid") > -1 && $(this).hasClass('itFailed');
+    });
+    selectedIteration.length || clickCount > 1 ? null : $("#iterationList li.itFailed")[0].click()
+    $("#iterationList li.itPassed").toggle()
+    $("div.bg-success [id*=requests]").parents('[class^="row iteration-"]').toggle();
+    clickCount = clickCount > 1 ? 1 : ++clickCount;
+    clickCount > 1 ? $("#showOnlyFailures").html("Show All Iterations") : $("#showOnlyFailures").html("Show Failed Iterations");
+    $(this).data("clickCount", clickCount)
+})
+</script>
+</body>
+</html>
